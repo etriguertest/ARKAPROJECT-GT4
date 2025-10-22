@@ -1,11 +1,11 @@
 # Nombre del flujo de trabajo
 name: Build, Push to Docker Hub, and Deploy to EC2
 
-# Se activa en cada push a la rama 'product-ms'
+# Se activa en cada push a la rama 'cart-ms'
 on:
   push:
     branches:
-      - product-ms
+      - cart-ms
 
 jobs:
   build-and-deploy:
@@ -54,7 +54,7 @@ jobs:
             docker run -d \
               --name ${{ github.ref_name }}-container \
               -p 80:8080 \
-              -e DB_URL="${{ secrets.DB_URL }}" \
+              -e DB_URL=" " \
               -e DB_USER="${{ secrets.DB_USER }}" \
               -e DB_PASS="${{ secrets.DB_PASS }}" \
               ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}:latest
