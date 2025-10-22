@@ -1,11 +1,11 @@
 # Nombre del flujo de trabajo
 name: Build, Push to Docker Hub, and Deploy to EC2
 
-# Se activa en cada push a la rama 'main'
+# Se activa en cada push a la rama 'product-ms'
 on:
   push:
     branches:
-      - main
+      - product-ms
 
 jobs:
   build-and-deploy:
