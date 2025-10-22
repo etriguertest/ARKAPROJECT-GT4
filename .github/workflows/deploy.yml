@@ -1,11 +1,11 @@
 # Nombre del flujo de trabajo
 name: Build, Push to Docker Hub, and Deploy to EC2
 
-# Se activa en cada push a la rama 'main'
+# Se activa en cada push a la rama 'product-ms'
 on:
   push:
     branches:
-      - main
+      - product-ms
 
 jobs:
   build-and-deploy:
@@ -31,7 +31,7 @@ jobs:
           context: .
           push: true
           # Nombra la imagen: tu-usuario/nombre-del-repo:latest
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}:latest
 
       # 4. Se conecta a la EC2 y ejecuta los comandos de despliegue
       - name: Deploy to EC2
@@ -42,19 +42,19 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             # Descarga la última versión de la imagen desde Docker Hub
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}:latest
 
             # Detiene el contenedor actual si ya está corriendo (|| true evita errores si no existe)
-            docker stop ${{ github.event.repository.name }}-container || true
+            docker stop ${{ github.ref_name }}-container || true
 
             # Elimina el contenedor antiguo
-            docker rm ${{ github.event.repository.name }}-container || true
+            docker rm ${{ github.ref_name }}-container || true
 
             # Ejecuta el nuevo contenedor con la imagen actualizada y los secretos de la BD
             docker run -d \
-              --name ${{ github.event.repository.name }}-container \
+              --name ${{ github.ref_name }}-container \
               -p 80:8080 \
               -e DB_URL="${{ secrets.DB_URL }}" \
               -e DB_USER="${{ secrets.DB_USER }}" \
               -e DB_PASS="${{ secrets.DB_PASS }}" \
-              ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
+              ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}:latest
