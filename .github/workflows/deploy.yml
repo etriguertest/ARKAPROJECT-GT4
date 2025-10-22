@@ -53,7 +53,7 @@ jobs:
             # Ejecuta el nuevo contenedor con la imagen actualizada y los secretos de la BD
             docker run -d \
               --name ${{ github.ref_name }}-container \
-              -p 80:8080 \
+              -p 8085:8080 \
               -e DB_URL=" " \
               -e DB_USER="${{ secrets.DB_USER }}" \
               -e DB_PASS="${{ secrets.DB_PASS }}" \
