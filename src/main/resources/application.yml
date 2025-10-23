@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: customer
+  r2dbc:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASS}
+  sql:   # Opcional, si quieres habilitar logs de SQL
+    init:
+      mode: always
