@@ -3,6 +3,7 @@ package com.arka.product.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.math.BigDecimal;
@@ -18,4 +19,6 @@ public class Product {
     private String description;
     private BigDecimal price;
     private Integer stock;
+    @Column("category_id")
+    private Integer categoryId;
 }
