@@ -38,7 +38,6 @@ public class ProductController {
                     existing.setDescription(p.getDescription());
                     existing.setPrice(p.getPrice());
                     existing.setStock(p.getStock());
-                    existing.setSku(p.getSku());
                     existing.setCategoryId(p.getCategoryId());
                     return repo.save(existing);
                 });
