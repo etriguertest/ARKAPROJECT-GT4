@@ -1,5 +1,6 @@
 package com.arka.product.controller;
 
+import com.arka.product.dto.ProductDTO;
 import com.arka.product.model.Product;
 import com.arka.product.repository.ProductRepository;
 import org.springframework.http.HttpStatus;
@@ -16,10 +17,14 @@ public class ProductController {
     public ProductController(ProductRepository repo) { this.repo = repo; }
 
     @GetMapping
-    public Flux<Product> all() { return repo.findAll(); }
+    public Flux<ProductDTO> all() {
+        return repo.findAllWithCategoryName();
+    }
 
     @GetMapping("/{id}")
-    public Mono<Product> get(@PathVariable Long id) { return repo.findById(id); }
+    public Mono<ProductDTO> get(@PathVariable Long id) {
+        return repo.findByIdWithCategoryName(id);
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
