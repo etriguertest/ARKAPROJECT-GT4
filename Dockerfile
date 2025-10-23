@@ -1,38 +1,34 @@
-# Etapa 1: Compilación del proyecto con Gradle
-FROM gradle:8.10.2-jdk17 AS build
-
-# Establecemos el directorio de trabajo
+# Usamos una imagen de Maven con OpenJDK 17 para compilar el proyecto.
+# Nombramos a esta etapa "build" para poder referenciarla más adelante.
+FROM maven:3.9.6-eclipse-temurin-17 AS build
+# Establecemos el directorio de trabajo dentro del contenedor.
 WORKDIR /app
-
-# Copiamos primero los archivos de configuración de Gradle para aprovechar la caché
-COPY build.gradle settings.gradle ./
-# Si tu proyecto usa el wrapper, cópialo también
-COPY gradlew ./
-COPY gradle ./gradle
-
-# Descargamos dependencias para aprovechar el cache de Docker
-RUN gradle dependencies --no-daemon || return 0
-
-# Ahora copiamos el código fuente
+# Copiamos primero el archivo de definición del proyecto (pom.xml).
+# Esto aprovecha el sistema de caché de Docker. Si el pom.xml no cambia,
+# Docker reutilizará la capa de dependencias descargadas, acelerando la compilación.
+COPY pom.xml .
+# Descargamos todas las dependencias del proyecto.
+RUN mvn -q -DskipTests dependency:go-offline
+# Ahora copiamos el resto del código fuente.
 COPY src ./src
+# La opción -DskipTests omite la ejecución de tests, lo cual es común para builds de Docker.
+RUN mvn -q -DskipTests clean package
+# Usamos una imagen base mucho más ligera que solo contiene el Java Runtime Environment (JRE).
+# No necesitamos el JDK completo para ejecutar la aplicación.
+FROM openjdk:17-jdk-slim
 
-# Compilamos el proyecto (sin ejecutar tests)
-RUN gradle clean build -x test --no-daemon
-
-# Etapa 2: Imagen final con solo el JRE (más ligera)
-FROM openjdk:21-jdk-slim
-
+# Establecemos el directorio de trabajo en la nueva etapa.
 WORKDIR /app
 
-# Copiamos el JAR compilado desde la etapa de build
-# Si usas Gradle, por defecto se genera en /app/build/libs/
-COPY --from=build /app/build/libs/*.jar app.jar
+# **Paso clave: Copiar el JAR desde la etapa de 'build'**
+# Aquí es donde copiamos únicamente el artefacto compilado desde la primera etapa.
+# Asegúrate de reemplazar 'mi-aplicacion-1.0.0.jar' con el nombre real de tu JAR.
+# Lo renombramos a 'app.jar' para tener un nombre genérico y fácil de usar.
+COPY --from=build /app/target/*-SNAPSHOT.jar app.jar
 
-# Exponemos el puerto estándar de Spring Boot
+# Exponemos el puerto en el que se ejecuta tu aplicación (8080 es el estándar para Spring Boot).
 EXPOSE 8080
-
-# Variable opcional para argumentos JVM
+# Variables de entorno opcionales
 ENV JAVA_OPTS=""
-
-# Comando de ejecución
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+# El comando que se ejecutará cuando el contenedor inicie.
+ENTRYPOINT ["sh","-c","java $JAVA_OPTS -jar app.jar"]
