@@ -1,14 +1,38 @@
-# Imagen base de Java
-FROM openjdk:21-jdk-slim
+# Etapa 1: Compilación del proyecto con Gradle
+FROM gradle:8.10.2-jdk17 AS build
 
-# Directorio de trabajo
+# Establecemos el directorio de trabajo
 WORKDIR /app
 
-# Copiar el JAR al contenedor
-COPY ms-authentication-0.0.1-SNAPSHOT.jar app.jar
+# Copiamos primero los archivos de configuración de Gradle para aprovechar la caché
+COPY build.gradle settings.gradle ./
+# Si tu proyecto usa el wrapper, cópialo también
+COPY gradlew ./
+COPY gradle ./gradle
 
-# Puerto expuesto (debe coincidir con el configurado en application.properties)
-EXPOSE 8081
+# Descargamos dependencias para aprovechar el cache de Docker
+RUN gradle dependencies --no-daemon || return 0
 
-# Comando para ejecutar la aplicación
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Ahora copiamos el código fuente
+COPY src ./src
+
+# Compilamos el proyecto (sin ejecutar tests)
+RUN gradle clean build -x test --no-daemon
+
+# Etapa 2: Imagen final con solo el JRE (más ligera)
+FROM openjdk:21-jdk-slim
+
+WORKDIR /app
+
+# Copiamos el JAR compilado desde la etapa de build
+# Si usas Gradle, por defecto se genera en /app/build/libs/
+COPY --from=build /app/build/libs/*.jar app.jar
+
+# Exponemos el puerto estándar de Spring Boot
+EXPOSE 8080
+
+# Variable opcional para argumentos JVM
+ENV JAVA_OPTS=""
+
+# Comando de ejecución
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
