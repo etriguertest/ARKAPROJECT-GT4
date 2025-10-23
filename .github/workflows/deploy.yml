@@ -1,0 +1,60 @@
+# Nombre del flujo de trabajo
+name: Build, Push to Docker Hub, and Deploy to EC2
+
+# Se activa en cada push a la rama 'customer-ms'
+on:
+  push:
+    branches:
+      - customer-ms
+
+jobs:
+  build-and-deploy:
+    # Se ejecuta en una máquina virtual de Ubuntu proporcionada por GitHub
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Descarga el código de tu repositorio
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Inicia sesión en Docker Hub usando los secretos
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 3. Construye la imagen de Docker y la sube al registro
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          # Nombra la imagen: tu-usuario/nombre-del-repo:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}:latest
+
+      # 4. Se conecta a la EC2 y ejecuta los comandos de despliegue
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # Descarga la última versión de la imagen desde Docker Hub
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}:latest
+
+            # Detiene el contenedor actual si ya está corriendo (|| true evita errores si no existe)
+            docker stop ${{ github.ref_name }}-container || true
+
+            # Elimina el contenedor antiguo
+            docker rm ${{ github.ref_name }}-container || true
+
+            # Ejecuta el nuevo contenedor con la imagen actualizada y los secretos de la BD
+            docker run -d \
+              --name ${{ github.ref_name }}-container \
+              -p 8087:8080 \
+              -e DB_URL="${{ secrets.DB_URL }}" \
+              -e DB_USER="${{ secrets.DB_USER }}" \
+              -e DB_PASS="${{ secrets.DB_PASS }}" \
+              ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}:latest
