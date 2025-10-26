@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: notification
+server:
+  port: 8080
+
+
+cloud:
+  aws:
+    region:
+      static: us-east-1 # Your AWS region
+    # Best practice is to use IAM roles/profiles; static keys are for simple demos
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+keys:
+  n8n-webhook-url: ${N8N_WEBHOOK_URL}
+  queue-name-order-notification: ${QUEUE_NAME_ORDER_NOTIFICATION}
