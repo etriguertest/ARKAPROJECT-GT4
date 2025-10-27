@@ -54,7 +54,8 @@ jobs:
             docker run -d \
               --name ${{ github.ref_name }}-container \
               -p 8084:8080 \
-              -e DB_URL="${{ secrets.DB_URL }}" \
-              -e DB_USER="${{ secrets.DB_USER }}" \
-              -e DB_PASS="${{ secrets.DB_PASS }}" \
+              -e AWS_ACCESS_KEY="${{ secrets.AWS_ACCESS_KEY }}" \
+              -e AWS_SECRET_KEY="${{ secrets.AWS_SECRET_KEY }}" \
+              -e N8N_WEBHOOK_URL="${{ secrets.N8N_WEBHOOK_URL }}" \
+              -e QUEUE_NAME_ORDER_NOTIFICATION="${{ secrets.QUEUE_NAME_ORDER_NOTIFICATION }}" \
               ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}:latest
