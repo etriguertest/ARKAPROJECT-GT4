@@ -1,6 +1,3 @@
-# Nombre del flujo de trabajo
-name: Build, Push to Docker Hub, and Deploy to EC2
-
 # Se activa en cada push a la rama 'inventoryMovements-ms'
 on:
   push:
@@ -31,7 +28,8 @@ jobs:
           context: .
           push: true
           # Nombra la imagen: tu-usuario/nombre-del-repo:latest
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}:latest
+          # AÑADE toLower() aquí
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ toLower(github.ref_name) }}:latest
 
       # 4. Se conecta a la EC2 y ejecuta los comandos de despliegue
       - name: Deploy to EC2
@@ -41,22 +39,25 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # Descarga la última versión de la imagen desde Docker Hub
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}:latest
+            # Descarga la última versión de la imagen (con el nombre en minúsculas)
+            # AÑADE toLower() aquí
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ toLower(github.ref_name) }}:latest
 
-            # Detiene el contenedor actual si ya está corriendo (|| true evita errores si no existe)
-            docker stop ${{ github.ref_name }}-container || true
+            # Detiene el contenedor (usando el nombre en minúsculas)
+            # AÑADE toLower() aquí
+            docker stop ${{ toLower(github.ref_name) }}-container || true
 
-            # Elimina el contenedor antiguo
-            docker rm ${{ github.ref_name }}-container || true
+            # Elimina el contenedor antiguo (usando el nombre en minúsculas)
+            # AÑADE toLower() aquí
+            docker rm ${{ toLower(github.ref_name) }}-container || true
 
-            # Ejecuta el nuevo contenedor con la imagen actualizada y los secretos de la BD
+            # Ejecuta el nuevo contenedor (usando el nombre en minúsculas)
             docker run -d \
-              --name ${{ github.ref_name }}-container \
+              --name ${{ toLower(github.ref_name) }}-container \
               -p 8082:8080 \
               -e DB_URL="${{ secrets.DB_URL }}" \
               -e DB_USER="${{ secrets.DB_USER }}" \
               -e DB_PASS="${{ secrets.DB_PASS }}" \
               -e AWS_ACCESS_KEY="${{ secrets.AWS_ACCESS_KEY }}" \
               -e AWS_SECRET_KEY="${{ secrets.AWS_SECRET_KEY }}" \
-              ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}:latest
+              ${{ secrets.DOCKERHUB_USERNAME }}/${{ toLower(github.ref_name) }}:latest
