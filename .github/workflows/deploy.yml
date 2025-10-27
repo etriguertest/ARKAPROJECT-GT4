@@ -1,3 +1,6 @@
+# Nombre del flujo de trabajo
+name: Build, Push to Docker Hub, and Deploy to EC2
+
 # Se activa en cada push a la rama 'inventoryMovements-ms'
 on:
   push:
@@ -28,7 +31,6 @@ jobs:
           context: .
           push: true
           # Nombra la imagen: tu-usuario/nombre-del-repo:latest
-          # AÑADE toLower() aquí
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ toLower(github.ref_name) }}:latest
 
       # 4. Se conecta a la EC2 y ejecuta los comandos de despliegue
@@ -39,19 +41,16 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # Descarga la última versión de la imagen (con el nombre en minúsculas)
-            # AÑADE toLower() aquí
+            # Descarga la última versión de la imagen desde Docker Hub
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ toLower(github.ref_name) }}:latest
 
-            # Detiene el contenedor (usando el nombre en minúsculas)
-            # AÑADE toLower() aquí
+            # Detiene el contenedor actual si ya está corriendo (|| true evita errores si no existe)
             docker stop ${{ toLower(github.ref_name) }}-container || true
 
-            # Elimina el contenedor antiguo (usando el nombre en minúsculas)
-            # AÑADE toLower() aquí
+            # Elimina el contenedor antiguo
             docker rm ${{ toLower(github.ref_name) }}-container || true
 
-            # Ejecuta el nuevo contenedor (usando el nombre en minúsculas)
+            # Ejecuta el nuevo contenedor con la imagen actualizada y los secretos de la BD
             docker run -d \
               --name ${{ toLower(github.ref_name) }}-container \
               -p 8082:8080 \
