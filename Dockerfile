@@ -24,7 +24,7 @@ WORKDIR /app
 # Aquí es donde copiamos únicamente el artefacto compilado desde la primera etapa.
 # Asegúrate de reemplazar 'mi-aplicacion-1.0.0.jar' con el nombre real de tu JAR.
 # Lo renombramos a 'app.jar' para tener un nombre genérico y fácil de usar.
-COPY --from=build /app/target/inventory-movements-0.0.1.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
 
 # Exponemos el puerto en el que se ejecuta tu aplicación (8080 es el estándar para Spring Boot).
 EXPOSE 8080
