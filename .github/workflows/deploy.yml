@@ -57,4 +57,9 @@ jobs:
               -e DB_URL="${{ secrets.DB_URL }}" \
               -e DB_USER="${{ secrets.DB_USER }}" \
               -e DB_PASS="${{ secrets.DB_PASS }}" \
+              -e AWS_ACCESS_KEY="${{ secrets.AWS_ACCESS_KEY }}" \
+              -e AWS_SECRET_KEY="${{ secrets.AWS_SECRET_KEY }}" \
+              -e PRODUCT_BASE_URL="${{ secrets.PRODUCT_BASE_URL }}" \
+              -e QUEUE_NAME_MOVEMENTS="${{ secrets.QUEUE_NAME_MOVEMENTS }}" \
+              -e TIMEOUT_MS="${{ secrets.TIMEOUT_MS }}" \
               ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}:latest
