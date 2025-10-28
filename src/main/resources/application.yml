@@ -9,9 +9,9 @@ spring:
         access-key: ${AWS_ACCESS_KEY}
         secret-key: ${AWS_SECRET_KEY}
   r2dbc:
-    url: ${DB_POSTGRES_URL}
-    username: ${DB_POSTGRES_USERNAME}
-    password: ${DB_POSTGRES_PASSWORD}
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASS}
     #url: r2dbc:postgresql://localhost:5432/postgres
     #url: r2dbc:postgresql://host.docker.internal:5432/postgres
     #username: postgres
