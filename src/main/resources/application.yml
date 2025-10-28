@@ -1,22 +1,37 @@
 spring:
   application:
-    name: inventory
+    name: movements
+  cloud:
+    aws:
+      region:
+        static: us-east-1
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
   r2dbc:
-    url: ${DB_URL}
-    username: ${DB_USER}
-    password: ${DB_PASS}
+    url: ${DB_POSTGRES_URL}
+    username: ${DB_POSTGRES_USERNAME}
+    password: ${DB_POSTGRES_PASSWORD}
     #url: r2dbc:postgresql://localhost:5432/postgres
     #url: r2dbc:postgresql://host.docker.internal:5432/postgres
     #username: postgres
     #password:
-server:
-  port: 8080
 
-cloud:
-  aws:
-    region:
-      static: us-east-1 # Your AWS region
-    # Best practice is to use IAM roles/profiles; static keys are for simple demos
-    credentials:
-      access-key: ${AWS_ACCESS_KEY}
-      secret-key: ${AWS_SECRET_KEY}
+server:
+  port: 8085
+
+logging:
+  level:
+    com.amazonaws: DEBUG
+    org.springframework.cloud.aws.messaging: DEBUG
+
+#cloud:
+#  aws:
+#    region:
+#      static: ${AWS_REGION} # Your AWS regionsqs:
+#      # Explicitly set the endpoint to point to LocalStack
+##      endpoint: http://host.docker.internal:4566/
+#    # Best practice is to use IAM roles/profiles; static keys are for simple demos
+#    credentials:
+#      access-key: ${AWS_ACCESS_KEY}
+#      secret-key: ${AWS_SECRET_KEY}
