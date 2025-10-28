@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.arka</groupId>
-	<artifactId>inventory-movements</artifactId>
+	<artifactId>inventory</artifactId>
 	<version>0.0.1</version>
 	<name>inventory</name>
 	<description>Microservicio de Inventario y Almacenes</description>
