@@ -1,10 +1,9 @@
 spring:
-  application:
-    name: order
-  r2dbc:
-    url: ${DB_URL}
+  datasource:
+    url: ${DB_URL_JDBC}
     username: ${DB_USER}
     password: ${DB_PASS}
-  sql:   # Opcional, si quieres habilitar logs de SQL
+    driver-class-name: org.postgresql.Driver
+  sql:   
     init:
       mode: always
