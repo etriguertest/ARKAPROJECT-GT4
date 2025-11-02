@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface InventoryRepository extends ReactiveCrudRepository<Inventory, Long> {
-    Mono<Inventory> findByProductId(Long productId);
+    Flux<Inventory> findByProductId(Long productId);
 
     // New method for date range query
     Flux<Inventory> findByDateReceivedBetween(LocalDate startDate, LocalDate endDate);

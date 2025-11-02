@@ -114,6 +114,7 @@ public class InventoryServiceImpl implements InventoryService{
     public Mono<InventoryDtoResp> findByIdCustom(Long id) {
         // 1. Start by fetching the initial inventory item
         return inventoryRepository.findByProductId(id)
+                .next()
                 .flatMap(inventory -> {
                     // 2. Define the two asynchronous operations that can run in parallel
                     // A. External call to the Product API
