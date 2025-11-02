@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/inventory")
 @RequiredArgsConstructor
+@CrossOrigin
 public class InventoryController {
 
     private final InventoryService inventoryServiceImpl;

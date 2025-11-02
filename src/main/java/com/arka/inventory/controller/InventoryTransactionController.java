@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @RestController
 @RequestMapping("/api/v1/inventory-movements")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200") // Apply CORS only to this controller
+@CrossOrigin
 public class InventoryTransactionController {
     private final InventoryMovementService service;
 

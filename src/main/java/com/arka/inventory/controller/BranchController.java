@@ -14,6 +14,7 @@ import java.time.Duration;
 @RestController
 @RequestMapping("/api/v1/branch")
 @RequiredArgsConstructor
+@CrossOrigin
 public class BranchController {
     private final BranchServiceImpl branchServiceImpl;
 
