@@ -5,7 +5,7 @@ name: Build, Push to Docker Hub, and Deploy to EC2
 on:
   push:
     branches:
-      - salesReport-ms
+      - salesreport-ms
 
 jobs:
   build-and-deploy:
@@ -37,7 +37,7 @@ jobs:
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_HOST }}
+          host: ${{ secrets.EC2_HOST4 }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
@@ -54,7 +54,8 @@ jobs:
             docker run -d \
               --name ${{ github.ref_name }}-container \
               -p 8086:8080 \
-              -e DB_URL="${{ secrets.DB_URL }}" \
+              -e DB_URL_SALES="${{ secrets.DB_URL }}" \
               -e DB_USER="${{ secrets.DB_USER }}" \
               -e DB_PASS="${{ secrets.DB_PASS }}" \
+              -e ORDER_BASE_URL="${{ secrets.ORDER_BASE_URL }}" \
               ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}:latest
