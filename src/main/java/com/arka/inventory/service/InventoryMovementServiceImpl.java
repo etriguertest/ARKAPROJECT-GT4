@@ -1,6 +1,7 @@
 package com.arka.inventory.service;
 
 import com.arka.inventory.aws.MessageProducerService;
+import com.arka.inventory.aws.SnsPublisherService;
 import com.arka.inventory.aws.SqsTransformer;
 import com.arka.inventory.dto.enums.InventoryMovementType;
 import com.arka.inventory.dto.enums.StockChangeType;
@@ -23,6 +24,7 @@ import java.util.List;
 public class InventoryMovementServiceImpl implements InventoryMovementService{
     private final InventoryMovementsRepository repository;
     private final MessageProducerService messageProducerService;
+    private final SnsPublisherService snsPublisherService;
 
     @Override
     public Mono<InventoryTransaction> insert(InventoryMovementRequestDto transaction) {
@@ -114,7 +116,8 @@ public class InventoryMovementServiceImpl implements InventoryMovementService{
         Mono<String> monoString = sqsTransformer.listToString(inventoryTransactionList);
         String result = monoString.block();
         System.out.println("result");
-        messageProducerService.send(result);
+//        messageProducerService.send(result);
+        snsPublisherService.publishNotification("MOVIMIENTO-INVENTARIO",result);
         return Mono.just(true);
 
     }
