@@ -7,5 +7,5 @@ import reactor.core.publisher.Flux;
 import java.time.LocalDate;
 
 public interface InventoryMovementsRepository extends R2dbcRepository<InventoryTransaction, Long> {
-    Flux<InventoryTransaction> findByMovementDateBetween(LocalDate startDate, LocalDate endDate);
+    Flux<InventoryTransaction> findByMovementDateBetweenOrderByMovementDateDesc(LocalDate startDate, LocalDate endDate);
 }

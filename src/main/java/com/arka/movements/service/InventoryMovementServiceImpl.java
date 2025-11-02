@@ -36,7 +36,7 @@ public class InventoryMovementServiceImpl implements InventoryMovementService{
 
     @Override
     public Flux<InventoryTransaction> findByMovementDateBetween(LocalDate startDate, LocalDate endDate) {
-        return repository.findByMovementDateBetween(startDate, endDate);
+        return repository.findByMovementDateBetweenOrderByMovementDateDesc(startDate, endDate);
     }
 
 

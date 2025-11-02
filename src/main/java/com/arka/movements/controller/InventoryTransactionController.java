@@ -15,6 +15,7 @@ import java.time.LocalDate;
 @RestController
 @RequestMapping("/api/v1/inventory-movements")
 @RequiredArgsConstructor
+@CrossOrigin
 public class InventoryTransactionController {
     private final InventoryMovementService service;
     private final MessageProducerService messageProducerService;
