@@ -15,7 +15,7 @@ jobs:
     steps:
       # 1. Descarga el código de tu repositorio
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       # 2. Inicia sesión en Docker Hub usando los secretos
       - name: Log in to Docker Hub
