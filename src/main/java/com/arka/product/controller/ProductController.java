@@ -10,6 +10,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/api/products")
+@CrossOrigin
 public class ProductController {
 
     private final ProductRepository repo;
