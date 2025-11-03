@@ -1,8 +1,12 @@
 package com.arka.order.Controller;
 
+import com.arka.order.Dto.AddProductToOrderRequest;
 import com.arka.order.Dto.CreateOrderRequest;
+import com.arka.order.Dto.DeleteProductToOrderRequest;
 import com.arka.order.Dto.OrderResponse;
+import com.arka.order.Dto.Response.ApiResponseCreateOrder;
 import com.arka.order.Service.IOrderService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,13 +20,43 @@ public class OrderController {
     }
 
     @PostMapping
-    public OrderResponse createOrder(@RequestBody CreateOrderRequest request){
-        return orderService.createOrder(request);
+    public ResponseEntity<ApiResponseCreateOrder<OrderResponse>> createOrder(@RequestBody CreateOrderRequest request){
+        ApiResponseCreateOrder<OrderResponse> response = orderService.createOrder(request);
+
+        if(!response.getCode().equals("000")){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/confirm/{OrderId}")
     public ResponseEntity<OrderResponse> confirmOrder(@PathVariable Long OrderId){
         OrderResponse response = orderService.confirmOrder(OrderId);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/add-product/{orderId}")
+    public ResponseEntity<ApiResponseCreateOrder<OrderResponse>> addProductToOrder(
+            @PathVariable Long orderId, @RequestBody AddProductToOrderRequest request
+            ){
+        request.setOrderId(orderId);
+
+        ApiResponseCreateOrder<OrderResponse> response = orderService.addItemsOrder(request);
+        if(!response.getCode().equals("000")){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/product-order/{orderId}")
+    public ResponseEntity<ApiResponseCreateOrder<OrderResponse>> removeProductoToOrder(
+            @PathVariable Long orderId,
+            @RequestBody DeleteProductToOrderRequest request
+            ){
+        ApiResponseCreateOrder<OrderResponse> response = orderService.removeProducToOrder(orderId,request);
+        if(!response.getCode().equals("000")){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
         return ResponseEntity.ok(response);
     }
 }

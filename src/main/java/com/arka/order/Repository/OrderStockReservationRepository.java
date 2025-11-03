@@ -14,4 +14,5 @@ public interface OrderStockReservationRepository extends JpaRepository<OrderStoc
     Integer getTotalReservedByProduct(@Param("productId") Long productId);
 
     List<OrderStockReservation> findByOrderId(Long orderId);
+    List<OrderStockReservation> findByOrderIdAndProductIdIn(Long orderId, List<Long> productIds);
 }
