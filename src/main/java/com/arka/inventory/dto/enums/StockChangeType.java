@@ -3,7 +3,11 @@ package com.arka.inventory.dto.enums;
 public enum StockChangeType {
 
     DECREASE("DECREMENT"),
-    INCREASE("INCREMENT");
+    INCREASE("INCREMENT"),
+    OUTOFSTOCK("OUTOFSTOCK"),
+    LOWSTOCK("LOWSTOCK"),
+    IN_STOCK("IN STOCK");
+
 
     private final String label;
 
