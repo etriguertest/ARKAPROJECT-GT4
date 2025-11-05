@@ -39,7 +39,7 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST3 }}
           username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          key: ${{ secrets.EC2_SSH_KEY3 }}
           script: |
             # Descarga la última versión de la imagen desde Docker Hub
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.ref_name }}:latest
