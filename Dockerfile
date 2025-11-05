@@ -15,7 +15,7 @@ COPY src ./src
 RUN mvn -q -DskipTests clean package
 # Usamos una imagen base mucho más ligera que solo contiene el Java Runtime Environment (JRE).
 # No necesitamos el JDK completo para ejecutar la aplicación.
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jre-alpine
 
 # Establecemos el directorio de trabajo en la nueva etapa.
 WORKDIR /app
@@ -32,3 +32,4 @@ EXPOSE 8080
 ENV JAVA_OPTS=""
 # El comando que se ejecutará cuando el contenedor inicie.
 ENTRYPOINT ["sh","-c","java $JAVA_OPTS -jar app.jar"]
+
