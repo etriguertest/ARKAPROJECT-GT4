@@ -15,7 +15,7 @@ COPY src ./src
 RUN mvn -q -DskipTests clean package
 # Usamos una imagen base mucho más ligera que solo contiene el Java Runtime Environment (JRE).
 # No necesitamos el JDK completo para ejecutar la aplicación.
-FROM openjdk:17-jdk-slim
+FROM openjdk:17-jdk-slim-bookworm
 
 # Establecemos el directorio de trabajo en la nueva etapa.
 WORKDIR /app
