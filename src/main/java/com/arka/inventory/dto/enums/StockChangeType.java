@@ -4,6 +4,7 @@ public enum StockChangeType {
 
     DECREASE("DECREMENT"),
     INCREASE("INCREMENT"),
+    ADJUST("ADJUSTMENT"),
     OUTOFSTOCK("OUTOFSTOCK"),
     LOWSTOCK("LOWSTOCK"),
     IN_STOCK("IN STOCK");

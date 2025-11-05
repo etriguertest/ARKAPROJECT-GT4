@@ -91,9 +91,13 @@ public class InventoryMovementServiceImpl implements InventoryMovementService{
             if(productType==0){
                 movement.setMovementType(InventoryMovementType.VENTA_DESPACHO_CLIENTE.getDescripcion());
                 movement.setQuantityType(StockChangeType.DECREASE.getLabel());
-            }else {
+            }else if(productType==1){
                 movement.setMovementType(InventoryMovementType.RECEPCION_POR_COMPRA.getDescripcion());
                 movement.setQuantityType(StockChangeType.INCREASE.getLabel());
+
+            }else{
+                movement.setMovementType(InventoryMovementType.AJUSTE_INVENTARIO.getDescripcion());
+                movement.setQuantityType(StockChangeType.ADJUST.getLabel());
 
             }
             movement.setMovementDate(LocalDate.now());

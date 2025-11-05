@@ -300,8 +300,10 @@ public class InventoryServiceImpl implements InventoryService{
                     int newQuantity;
                     if(updateItem.getType()==0) {
                         newQuantity = inventory.getQuantity() - updateItem.getQuantity();
-                    }else {
+                    }else if(updateItem.getType()==1) {
                         newQuantity = inventory.getQuantity() + updateItem.getQuantity();
+                    }else{
+                        newQuantity = updateItem.getQuantity();
                     }
                     if (newQuantity < 0) {
                         // Add to errors map and SKIP saving this item

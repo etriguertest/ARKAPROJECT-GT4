@@ -10,6 +10,7 @@ public enum InventoryMovementType {// ------------------------------------------
     DEVOLUCION_DE_CLIENTE("A11","DEVOLUCION_DE_CLIENTE", "Reingreso de producto por cliente"),
     ENTRADA_POR_PRODUCCION("A12","ENTRADA_POR_PRODUCCION", "Producto terminado proveniente de fabricación"),
     AJUSTE_POSITIVO("A13","AJUSTE_POSITIVO", "Corrección de inventario (Sobrante)"),
+    AJUSTE_INVENTARIO("A13","AJUSTE_INVENTARIO", "Corrección de inventario (Sobrante)"),
     RECEPCION_POR_TRASPASO("A14", "RECEPCION_POR_TRASPASO","Entrada de stock desde otro almacén propio"),
 
     // ----------------------------------------------------
