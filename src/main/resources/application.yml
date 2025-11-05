@@ -16,7 +16,7 @@ spring:
 # ===============================================~
 external:
   api:
-    order-url: "http://ec2-3-18-232-109.us-east-2.compute.amazonaws.com:8083/api" # The base URL for the Order API
+    order-url: "http://ec2-18-191-30-136.us-east-2.compute.amazonaws.com:8083/api" # The base URL for the Order API
     timeout-ms: 5000
 
 keys:
