@@ -5,6 +5,7 @@ import com.arka.order.Dto.CreateOrderRequest;
 import com.arka.order.Dto.DeleteProductToOrderRequest;
 import com.arka.order.Dto.OrderResponse;
 import com.arka.order.Dto.Response.ApiResponseCreateOrder;
+import com.arka.order.Dto.Response.ApiResponseListOrdersByStatus;
 import com.arka.order.Service.IOrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +58,12 @@ public class OrderController {
         if(!response.getCode().equals("000")){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/order-status/{status}")
+    public ResponseEntity<ApiResponseListOrdersByStatus> getOrdersByStatus(@PathVariable String status) {
+        ApiResponseListOrdersByStatus response = orderService.getOrdersByStatus(status);
         return ResponseEntity.ok(response);
     }
 }

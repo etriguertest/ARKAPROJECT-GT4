@@ -2,6 +2,7 @@ package com.arka.order.Service;
 
 import com.arka.order.Dto.*;
 import com.arka.order.Dto.Response.ApiResponseCreateOrder;
+import com.arka.order.Dto.Response.ApiResponseListOrdersByStatus;
 import com.arka.order.Entity.Order;
 import com.arka.order.Entity.OrderItem;
 import com.arka.order.Entity.OrderStockReservation;
@@ -388,6 +389,31 @@ public class OrderServiceImpl implements IOrderService{
                     .body(null)
                     .build();
         }
+    }
+
+    public ApiResponseListOrdersByStatus getOrdersByStatus(String status){
+        OrderStatus orderStatus;
+        try{
+            orderStatus = OrderStatus.valueOf(status.toUpperCase());
+        }catch (IllegalArgumentException e){
+            throw new BusinessException("Estado de orden no válido: " + status);
+        }
+
+        List<Order> orders = orderRepository.findByStatus(orderStatus);
+
+        if (orders.isEmpty()) {
+            throw new BusinessException("No se encontraron órdenes con estado: " + status);
+        }
+
+        List<OrderResponse> responseList = orders.stream()
+                .map(this::mapToResponseDTO)
+                .collect(Collectors.toList());
+
+        return ApiResponseListOrdersByStatus.builder()
+                .success(true)
+                .message("Órdenes obtenidas exitosamente con estado: " + status)
+                .orders(responseList)
+                .build();
     }
 
     private OrderResponse mapToResponseDTO(Order order) {
