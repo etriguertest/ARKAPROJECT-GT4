@@ -3,6 +3,7 @@ package com.arka.product.controller;
 import com.arka.product.dto.ProductDTO;
 import com.arka.product.model.Product;
 import com.arka.product.repository.ProductRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -38,10 +39,10 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<Product> create(@RequestBody Product p) { return repo.save(p); }
+    public Mono<Product> create(@Valid @RequestBody Product p) { return repo.save(p); }
 
     @PutMapping("/{id}")
-    public Mono<Product> update(@PathVariable Long id, @RequestBody Product p) {
+    public Mono<Product> update(@PathVariable Long id,@Valid @RequestBody Product p) {
         return repo.findById(id)
                 .flatMap(existing -> {
                     existing.setName(p.getName());
