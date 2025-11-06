@@ -178,6 +178,7 @@ public class OrderServiceImpl implements IOrderService{
 
         List<Map<String, Object>> reduceStockRequest = reservations.stream()
                 .map(r -> Map.of(
+                        "numOrder",orderId,
                         "type",0,
                         "productId", (Object) r.getProductId(),
                         "quantity", (Object) r.getReservedQuantity()
