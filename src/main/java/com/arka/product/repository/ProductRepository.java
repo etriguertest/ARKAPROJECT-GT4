@@ -23,4 +23,13 @@ public interface ProductRepository extends R2dbcRepository<Product, Long> {
         WHERE p.id = :id
     """)
     Mono<ProductDTO> findByIdWithCategoryName(Long id);
+
+
+    @Query("""
+        SELECT p.id , p.name, p.description, p.price, p.stock, c.nombre AS categoryName
+        FROM arka.products AS p
+        LEFT JOIN arka.category AS c ON p.category_id = c.id
+        WHERE LOWER(p.name) LIKE LOWER(:name)
+    """)
+    Flux<ProductDTO> findByNameWithCategoryName(String name);
 }

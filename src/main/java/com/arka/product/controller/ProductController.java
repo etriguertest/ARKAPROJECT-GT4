@@ -18,8 +18,17 @@ public class ProductController {
     public ProductController(ProductRepository repo) { this.repo = repo; }
 
     @GetMapping
-    public Flux<ProductDTO> all() {
-        return repo.findAllWithCategoryName();
+    public Flux<ProductDTO> all(@RequestParam(name = "name", required = false) String name) {
+
+        if (name != null && !name.isBlank()) {
+            // Si el parámetro 'name' viene en la URL, busca por nombre
+            // Añadimos '%' para que sea una búsqueda parcial (ej. "tele" encuentra "Televisor")
+            String searchName = "%" + name + "%";
+            return repo.findByNameWithCategoryName(searchName);
+        } else {
+            // Si no hay parámetro 'name', devuelve todos los productos
+            return repo.findAllWithCategoryName();
+        }
     }
 
     @GetMapping("/{id}")
