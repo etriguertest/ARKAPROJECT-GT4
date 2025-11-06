@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: sales-ms
+  r2dbc:
+    # Lee las propiedades de R2DBC desde las variables de entorno
+    url: ${DB_URL_SALES}
+    username: ${DB_USER}
+    password: ${DB_PASS}
+  sql:
+    init:
+      mode: always
+      platform: postgres
+      schema-locations: classpath:schema.sql
+# ===============================================~
+# ADD YOUR EXTERNAL RESOURCE CONFIGURATION HERE
+# ===============================================~
+external:
+  api:
+    order-url: "http://ec2-18-191-30-136.us-east-2.compute.amazonaws.com:8083/api" # The base URL for the Order API
+    timeout-ms: 5000
+
+keys:
+  order-base-url: ${ORDER_BASE_URL}
