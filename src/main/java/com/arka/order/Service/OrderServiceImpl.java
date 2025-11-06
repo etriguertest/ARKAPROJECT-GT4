@@ -13,6 +13,7 @@ import com.arka.order.Utils.Errors.BusinessException;
 import com.arka.order.Utils.OrderStatus;
 import com.arka.order.Utils.ReservationStatus;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -31,11 +32,11 @@ public class OrderServiceImpl implements IOrderService{
     private final OrderItemRepository orderItemRepository;
     private final OrderStockReservationRepository orderStockReservation;
 
-    public OrderServiceImpl (OrderRepository orderRepository, WebClient webClient,
+    public OrderServiceImpl (OrderRepository orderRepository,
                              OrderStockReservationRepository orderStockReservation,
                              OrderItemRepository orderItemRepository){
         this.orderRepository = orderRepository;
-        this.webClient = webClient;
+        this.webClient = WebClient.create("https://64474k7pgh.execute-api.us-east-2.amazonaws.com/dev/inventory");
         this.orderStockReservation = orderStockReservation;
         this.orderItemRepository = orderItemRepository;
     }
