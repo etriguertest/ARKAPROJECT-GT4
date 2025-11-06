@@ -74,4 +74,10 @@ public class InventoryTransactionController {
 
         return service.findByMovementDateBetween(startDate, endDate);
     }
+
+    @GetMapping("/last-movements/{inventoryUnitId}")
+    public Flux<InventoryTransaction> findLastMovementsByUnit(
+            @PathVariable("inventoryUnitId") Long inventoryUnitId) {
+        return service.findLastTenMovementsByInventoryUnitId(inventoryUnitId);
+    }
 }

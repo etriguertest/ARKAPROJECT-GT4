@@ -8,4 +8,5 @@ import java.time.LocalDate;
 
 public interface InventoryMovementsRepository extends R2dbcRepository<InventoryTransaction, Long> {
     Flux<InventoryTransaction> findByMovementDateBetweenOrderByMovementDateDesc(LocalDate startDate, LocalDate endDate);
+    Flux<InventoryTransaction> findTop10ByInventoryUnitIdOrderByMovementDateDescIdDesc(Long inventoryUnitId);
 }

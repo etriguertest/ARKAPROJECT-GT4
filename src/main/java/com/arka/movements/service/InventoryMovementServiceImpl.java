@@ -38,7 +38,10 @@ public class InventoryMovementServiceImpl implements InventoryMovementService{
     public Flux<InventoryTransaction> findByMovementDateBetween(LocalDate startDate, LocalDate endDate) {
         return repository.findByMovementDateBetweenOrderByMovementDateDesc(startDate, endDate);
     }
-
+    @Override
+    public Flux<InventoryTransaction> findLastTenMovementsByInventoryUnitId(Long inventoryUnitId) {
+        return repository.findTop10ByInventoryUnitIdOrderByMovementDateDescIdDesc(inventoryUnitId);
+    }
 
     @Override
     public Mono<Boolean> saveList(List<InventoryUpdateItemRequest> inventoryUpdateItemRequests, List<Inventory> transaction) {

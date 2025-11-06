@@ -38,4 +38,10 @@ public interface InventoryMovementService {
      * @return A Mono emitting the saved transaction.
      */
     Mono<Boolean> saveList(List<InventoryUpdateItemRequest> inventoryUpdateItemRequests, List<Inventory> transaction);
+    /**
+     * Finds the last N inventory transactions for a specific inventory unit.
+     * @param inventoryUnitId The ID of the inventory unit (product).
+     * @return A Flux emitting the last 10 matching transactions.
+     */
+    Flux<InventoryTransaction> findLastTenMovementsByInventoryUnitId(Long inventoryUnitId);
 }
