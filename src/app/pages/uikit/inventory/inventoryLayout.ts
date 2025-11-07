@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild ,inject} from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild ,inject, signal} from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -22,7 +22,7 @@ import { TabsModule } from 'primeng/tabs';
 import { ButtonGroupModule } from 'primeng/buttongroup';
 import { ToolbarModule } from 'primeng/toolbar';
 import { DatePickerModule } from 'primeng/datepicker';
-import { InventoryDto, InventoryMovementDto, InventoryService } from '@/pages/service/Inventory.service';
+import { InventoryDto, InventoryMovementDto, InventoryService, WarehouseBranch } from '@/pages/service/Inventory.service';
 import { ConfigService } from '@/pages/service/config.service';
 interface expandedRows {
     [key: string]: boolean;
@@ -85,8 +85,12 @@ export class InventoryLayout implements OnInit {
     balanceFrozen: boolean = false;
 
     //Fields Monitor Form
+    warehouseBranchs = signal<WarehouseBranch[]>([]);
     lstMovements: InventoryMovementDto [] = [];
     lstInventory: InventoryDto [] = [];
+    monitorDropdownBranchSelected: string = '';
+    monitorDropdownBranchValues : { id: number | string; name: string }[] = [];
+    monitorDropdownBranchModel: any = null;
     monitorDropdownEstadoValues = [
         { name: 'IN STOCK', code: 'IN STOCK' },
         { name: 'LOWSTOCK', code: 'LOWSTOCK' },
@@ -207,6 +211,17 @@ export class InventoryLayout implements OnInit {
             this.apiUrl = this.configService.get('BASE_URL_MOVEMENTS'); 
             console.log('Successfully loaded config. The API URL is:', this.apiUrl);
             this.inventoryService.baseUrlMovements=this.apiUrl ? this.apiUrl:"";
+            this.inventoryService.getAllBranchs().subscribe((data:WarehouseBranch[]) => {
+                this.warehouseBranchs.set(data);
+                // CONVERSION STEP: Map the data to the desired DropdownItem structure
+                // **CORRECTION:** Use the assignment operator `=` instead of `:` followed by `[]`
+                this.monitorDropdownBranchValues = data.map((branch: WarehouseBranch) => ({
+                        id: branch.id, 
+                        name: branch.branchName 
+                }));
+                // 3. Set the signal for the dropdown values
+                // this.monitorDropdownEstadoValues.push(convertedData);
+            });
 
         })
         .catch((error) => {
@@ -311,7 +326,11 @@ export class InventoryLayout implements OnInit {
             this.endDate=this.getFormattedDate(this.monitorFormFechaFinal);
         }
 
-        this.inventoryService.getInventoryByFilters(this.startDate, this.endDate,estado,this.monitorFormIdBranch?this.monitorFormIdBranch:"").subscribe({
+        if (this.monitorDropdownBranchModel != null) {
+            this.monitorDropdownBranchSelected = this.monitorDropdownBranchModel.id; 
+            console.log("if (this.monitorDropdownEstadoModel != null)")
+        }
+        this.inventoryService.getInventoryByFilters(this.startDate, this.endDate,estado,this.monitorDropdownBranchSelected).subscribe({
         next: (data:InventoryDto[]) => {
             // Data received is the JSON array (like the one you provided initially)
             this.lstInventory = data; 

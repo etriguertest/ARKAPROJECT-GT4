@@ -138,7 +138,8 @@
                         <div class="flex flex-wrap gap-6">
                             <div class="flex flex-col grow basis-0 gap-2">
                                 <label for="monitorIdBranch">Id Sucursal</label>
-                                <input pInputText id="monitorIdBranch" type="text" class="p-inputtext-sm" [(ngModel)]="monitorFormIdBranch"/>
+                                <!-- <input pInputText id="monitorIdBranch" type="text" class="p-inputtext-sm" [(ngModel)]="monitorFormIdBranch"/> -->
+                                <p-select [(ngModel)]="monitorDropdownBranchModel" [options]="monitorDropdownBranchValues" optionLabel="name" placeholder="Select" style="font-size: 12px;"  />
                             </div>
                             <div class="flex flex-col grow basis-0 gap-2">
                                 <label for="fechaInicio">Fecha Inicio</label>

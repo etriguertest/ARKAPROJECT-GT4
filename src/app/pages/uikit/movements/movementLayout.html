@@ -35,11 +35,11 @@
                         <div class="flex flex-wrap gap-6">
                             <div class="flex flex-col grow basis-0 gap-2">
                                 <label for="monitorFormIdInventory">Id Inventario</label>
-                                <input pInputText id="monitorFormIdInventory" type="text" class="p-inputtext-sm" [(ngModel)]="monitorFormIdInventory"/>
+                                <input pInputText id="monitorFormIdInventory" type="text" class="p-inputtext-sm" [(ngModel)]="monitorFormIdInventory" disabled/>
                             </div>
                             <div class="flex flex-col grow basis-0 gap-2">
                                 <label for="monitorIdBranch">Id Sucursal</label>
-                                <input pInputText id="monitorIdBranch" type="text" class="p-inputtext-sm" [(ngModel)]="monitorFormIdBranch"/>
+                                <input pInputText id="monitorIdBranch" type="text" class="p-inputtext-sm" [(ngModel)]="monitorFormIdBranch" disabled/>
                             </div>
                             <div class="flex flex-col grow basis-0 gap-2">
                                 <label for="fechaInicio">Fecha Inicio</label>
@@ -51,11 +51,11 @@
                         <div class="flex flex-wrap gap-6">
                             <div class="flex flex-col grow basis-0 gap-2">
                                 <label for="monitorFormDocReference">Doc Referencia</label>
-                                <input pInputText id="monitorFormDocReference" type="text" class="p-inputtext-sm" [(ngModel)]="monitorFormDocReference"/>
+                                <input pInputText id="monitorFormDocReference" type="text" class="p-inputtext-sm" [(ngModel)]="monitorFormDocReference" disabled/>
                             </div>
                             <div class="flex flex-col grow basis-0 gap-2">
                                 <label for="name2">Estado</label>
-                                <p-select [(ngModel)]="monitorDropdownEstadoModel" [options]="monitorDropdownEstadoValues" optionLabel="name" placeholder="Select" style="font-size: 12px;"  />
+                                <p-select [(ngModel)]="monitorDropdownEstadoModel" [options]="monitorDropdownEstadoValues" optionLabel="name" placeholder="Select" style="font-size: 12px;"  disabled/>
                             </div>
                             <div class="flex flex-col grow basis-0 gap-2">
                                 <label for="fechaFinal">Fecha Fin</label>
