@@ -93,8 +93,8 @@ export class MovementLayout implements OnInit {
     monitorFormIdInventory: String | null = null;
     monitorFormIdBranch: String | null = null;
     monitorFormEstado: String | null = null;
-    monitorFormFechaInicio: String | null = null;
-    monitorFormFechaFinal: String | null = null;
+    monitorFormFechaInicio: string | null = null;
+    monitorFormFechaFinal: string | null = null;
     
     selectedInventory: InventoryDto | null = null;// Initialize it to 1 since your HTML starts with [value]="1" (Monitor)
     
@@ -209,6 +209,12 @@ export class MovementLayout implements OnInit {
     //     });
     // }
     loadMovements(): void {
+        if (this.monitorFormFechaInicio) {
+            this.startDate=this.getFormattedDate(this.monitorFormFechaInicio);
+        }
+        if (this.monitorFormFechaFinal) {
+            this.endDate=this.getFormattedDate(this.monitorFormFechaFinal);
+        }
         this.lstMovements = [];
         console.log(`Getting movements from ${this.startDate} to ${this.endDate}...`);
 
@@ -237,5 +243,20 @@ export class MovementLayout implements OnInit {
         });
     }
 
+
+    getFormattedDate(dateValue: string | number | Date ): string {
+        const dateObj = new Date(dateValue);
+        
+        // Safety check for invalid dates
+        if (isNaN(dateObj.getTime())) {
+            return ''; 
+        }
+        
+        const year = dateObj.getFullYear();
+        const month = (dateObj.getMonth() + 1).toString().padStart(2, '0'); 
+        const day = dateObj.getDate().toString().padStart(2, '0');
+        
+        return `${year}-${month}-${day}`;
+    }
 
 }
