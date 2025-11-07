@@ -1,0 +1,13 @@
+{
+  "BASE_URL_INVENTORY": "https://64474k7pgh.execute-api.us-east-2.amazonaws.com/dev/inventory/",
+  "BASE_URL_INVENTORYXX": "http://localhost:8084/",
+  "BASE_URL_MOVEMENTS": "https://64474k7pgh.execute-api.us-east-2.amazonaws.com/dev/movement/",
+  "BASE_URL_MOVEMENTSXX": "http://localhost:8080/",
+  "BASE_URL_PRODUCS": "https://64474k7pgh.execute-api.us-east-2.amazonaws.com/dev/product/",
+  "BASE_URL_NOTIFICATIONS": "https://64474k7pgh.execute-api.us-east-2.amazonaws.com/dev/notification",
+  "BASE_URL_SELLING": "http://localhost:8084/api/v1/",
+  "BASE_URL_SHOPLIST": "http://localhost:8084/api/v1/",
+  "BASE_URL_CUSTOMER": "https://64474k7pgh.execute-api.us-east-2.amazonaws.com/dev/customer"
+}
+
+

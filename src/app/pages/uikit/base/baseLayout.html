@@ -1,0 +1,320 @@
+
+
+
+        
+            <div class="flex flex-wrap gap-6 justify-between items-center">
+               <p-tabs [value]="activeTabIndex" (onChange)="onTabChange($event)"> 
+                <p-tablist>
+                    <p-tab [value]="0" (click)="showGeneralView()">General</p-tab>
+                    <p-tab [value]="1" (click)="showMonitorView()">Monitor</p-tab>
+                </p-tablist>
+            </p-tabs>
+               <!--<div class="!ml-auto mr-80">
+                    <div class="font-bold text-xl mb-4">Monitor de Cotizaciones</div> 
+                </div> -->
+
+                <div class="flex-grow justify-between"></div>
+                <div class="border border-surface rounded-border m-2 p-1 bg-gray-600" style="margin-right: 35px;">
+                                <div class="font-bold text-lg text-secondary m-1 p-0 text-white">Customer Orders. </div> 
+                                
+                </div>
+            </div>
+
+
+
+ <div class="card" *ngIf="isGeneralVisible">   
+                <!-- <div class="flex flex-wrap gap-4 border border-surface rounded-border m-2 p-2x bg-primary" style="padding-left: 5px;">
+                    <div class="flex flex-wrap gap-4 border border-surface rounded-border m-1 p-0 bg-white ">
+                        <p-button label="Nuevo" icon="pi pi-plus" severity="secondary"  size="small"  text />
+                        <p-button label="Guardar" icon="pi pi-save" severity="secondary" size="small"  text/>
+                        <p-button label="Limpiar" icon="pi pi-trash" severity="secondary"  size="small" text/>
+                    </div>
+                </div> -->
+
+                <p-toolbar styleClass="mb-1 flex" style="margin: 5px;">
+                    <ng-template #start>
+                                <p-button label="Nuevo" icon="pi pi-plus" severity="primary"  size="small"  text />
+                                <p-button label="Guardar" icon="pi pi-save" severity="primary" size="small"  text/>
+                                <p-button label="Limpiar" icon="pi pi-trash" severity="secondary"  size="small" text/>
+                        <!-- <p-button label="New" icon="pi pi-plus" severity="secondary" class="mr-2"  size="small"  />
+                        <p-button severity="secondary" label="Delete" icon="pi pi-trash" outlined   size="small"  /> [disabled]="!selectedProducts || !selectedProducts.length" -->
+                    </ng-template>
+
+                    <ng-template #end>
+                        <p-button label="Export" icon="pi pi-upload" severity="secondary" size="small"  (onClick)="exportCSV()" />
+                    </ng-template>
+                </p-toolbar>
+        
+                <!--<div class="font-semibold text-xl mb-4">Formulario</div> -->
+                <div class="border border-surface rounded-border m-2 p-2 flex flex-col gap-6 ">
+                    <div class="card">
+                    <!--<div class="font-semibold text-xl">Vertical Grid</div> -->
+                        <div class="flex flex-wrap gap-6">
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="name2">Tipo Documentossssssssss</label>
+                                <!-- <input pInputText id="name2" type="text" class="p-inputtext-sm" /> -->
+                                <p-select [(ngModel)]="dropdownValue" [options]="dropdownValues" optionLabel="name" placeholder="Select" style="font-size: 12px;"  />
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="name2">Cliente</label>
+                                <input pInputText id="name2" type="text" class="p-inputtext-sm" />
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="email2">Monto</label>
+                                <input pInputText id="email2" type="text"class="p-inputtext-sm"  />
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="email2">Observaciones</label>
+                                <input pInputText id="email2" type="text" class="p-inputtext-sm" />
+                            </div>
+                        </div>
+                        <p></p>
+                        <div class="flex flex-wrap gap-6">
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="name2">No Cotizacion</label>
+                                <input pInputText id="name2" type="text" class="p-inputtext-sm" />
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="name2">Nombre Cliente</label>
+                                <input pInputText id="name2" type="text" class="p-inputtext-sm" />
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="email2">Establecimiento</label>
+                                <input pInputText id="email2" type="text"class="p-inputtext-sm"  />
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="email2">Origen de Venta</label>
+                                <input pInputText id="email2" type="text" class="p-inputtext-sm" />
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    
+                <div class="flex flex-wrap gap-4 border border-surface rounded-border m-2 p-1 bg-gray-600" style="margin-top: -2px;margin-bottom: -6px;">
+                <div class="font-semibold text-lg text-white " style="margin-left: 10;">&nbsp;Detalle</div>
+                
+                </div>
+            <!-- <div class="font-semibold text-xl mb-4">Frozen Columns</div>-->
+                <!-- <p-togglebutton [(ngModel)]="balanceFrozen" [onIcon]="'pi pi-lock'" offIcon="pi pi-lock-open" [onLabel]="'Balance'" offLabel="Balance" /> -->
+
+                <!-- <div class="flex flex-wrap gap-2 ">
+                            <div class="flex flex-col grow basis-0 gap-2">
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <input pInputText id="name2" type="text" />
+                            </div>
+                    </div> -->
+
+                <div class="border border-surface rounded-border m-2 p-0 flex flex-col gap-6">
+                <p-table #dt [value]="lstOrderDetail" [scrollable]="true" scrollHeight="300px" styleClass="mt-4 " >
+                    <ng-template #header>
+                        <tr>
+                            <th style="min-width:200px;" pFrozenColumn class="font-bold bg">Id</th>
+                            <th style="min-width:100px">orderId</th>
+                            <th style="min-width:200px">productId</th>
+                            <th style="min-width:200px">inventoryId</th>
+                            <th style="min-width:200px">quantity</th>
+                            <th style="min-width:200px" alignFrozen="right" pFrozenColumn [frozen]="balanceFrozen" [ngClass]="{ 'font-bold': balanceFrozen }">pricePerUnit</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-lstOrderDetail>
+                        <tr>
+                            <td pFrozenColumn class="font-bold">{{ lstOrderDetail.id }}</td>
+                            <td style="min-width:100px">{{ lstOrderDetail.orderId }}</td>
+                            <td>{{ lstOrderDetail.productId }}</td>
+                            <td>{{ lstOrderDetail.inventoryId }}</td>
+                            <td>{{ lstOrderDetail.quantity }}</td>
+                            <td>{{ lstOrderDetail.pricePerUnit }}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                </div>
+                <div class="flex flex-col md:flex-row-reverse md:items-end w-full " >
+                    
+                    <div class="w-full md:w-4/10  " >
+                        <div class="container" style="padding-right: 5px;">
+                        <div class="card flex flex-col gap-3 border border-surface rounded-border" >
+
+                            <div class="grid grid-cols-12 gap-4 grid-cols-12 gap-2">
+                                <label for="subtotal" class="flex items-center col-span-12 mb-2 md:col-span-2 md:mb-0">SubTotal</label>
+                                <div class="col-span-12 md:col-span-10">
+                                    <input pInputText id="subtotal" type="text" class="p-inputtext-sm w-full" [(ngModel)]="generalFormSubtotal" />
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-12 gap-4 grid-cols-12 gap-2">
+                                <label for="email3" class="flex items-center col-span-12 mb-2 md:col-span-2 md:mb-0">Impuesto</label>
+                                <div class="col-span-12 md:col-span-10">
+                                    <input pInputText id="email3" type="text" class="p-inputtext-sm w-full"  />
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-12 gap-4 grid-cols-12 gap-2">
+                                <label for="total" class="flex items-center col-span-12 mb-2 md:col-span-2 md:mb-0">Total</label>
+                                <div class="col-span-12 md:col-span-10">
+                                    <input pInputText id="total" type="text" class="p-inputtext-sm w-full" [(ngModel)]="generalFormTotalAmount" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                         </div>
+                </div> 
+ </div>
+                
+
+             <!--   <div class="flex flex-col md:flex-row-reverse md:items-end w-full">
+                    <div class="w-full md:w-4/10 justify-between">
+                <div class="border border-surface rounded-border m-2 p-1 bg-primary" >
+                                <div class="font-bold text-xl text-secondary m-1 p-1 text-white">Totales</div> 
+                                <div class="card flex flex-col gap-4">
+
+                            <div class="grid grid-cols-12 gap-4 grid-cols-12 gap-2">
+                                <label for="email3" class="flex items-center col-span-12 mb-2 md:col-span-2 md:mb-0">SubTotal</label>
+                                <div class="col-span-12 md:col-span-10">
+                                    <input pInputText id="email3" type="text" class="p-inputtext-sm w-full"  />
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-12 gap-4 grid-cols-12 gap-2">
+                                <label for="email3" class="flex items-center col-span-12 mb-2 md:col-span-2 md:mb-0">Impuesto</label>
+                                <div class="col-span-12 md:col-span-10">
+                                    <input pInputText id="email3" type="text" class="p-inputtext-sm w-full"  />
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-12 gap-4 grid-cols-12 gap-2">
+                                <label for="email3" class="flex items-center col-span-12 mb-2 md:col-span-2 md:mb-0">Total</label>
+                                <div class="col-span-12 md:col-span-10">
+                                    <input pInputText id="email3" type="text" class="p-inputtext-sm w-full"  />
+                                </div>
+                            </div>
+
+
+                         </div>
+                </div>
+                         </div>
+                </div> -->
+ </div>
+
+ <div class="card" *ngIf="isMonitorVisible">   
+                <p-toolbar styleClass="mb-1 flex" style="margin: 5px;">
+                    <ng-template #start>
+                                <p-button label="Buscar" icon="pi pi-search" severity="primary"  size="small"  text />
+                                <p-button label="Limpiar" icon="pi pi-trash" severity="secondary"  size="small" text/>
+                    </ng-template>
+                    <ng-template #end>
+                        <p-button label="Export" icon="pi pi-upload" severity="secondary" size="small"  (onClick)="exportCSV()" />
+                    </ng-template>
+                </p-toolbar>
+                <div class="border border-surface rounded-border m-2 p-2 flex flex-col gap-6 ">
+                    <div class="card">
+                        <div class="flex flex-wrap gap-6">
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="name2">Tipo Documento</label>
+                                <p-select [(ngModel)]="dropdownValue" [options]="dropdownValues" optionLabel="name" placeholder="Select" style="font-size: 12px;"  />
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="name2">Id Cliente</label>
+                                <input pInputText id="name2" type="text" class="p-inputtext-sm" />
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="name2">Estado</label>
+                                <p-select [(ngModel)]="dropdownEstadoModel" [options]="dropdownEstadoValues" optionLabel="name" placeholder="Select" style="font-size: 12px;"  />
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="email2">Fecha Inicio</label>
+                                <input pInputText id="email2" type="text" class="p-inputtext-sm" />
+                            </div>
+                        </div>
+                        <p></p>
+                        <div class="flex flex-wrap gap-6">
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="name2">No Pedido</label>
+                                <input pInputText id="name2" type="text" class="p-inputtext-sm" />
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="name2">Nombre Cliente</label>
+                                <input pInputText id="name2" type="text" class="p-inputtext-sm" />
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="email2">Establecimiento</label>
+                                <input pInputText id="email2" type="text"class="p-inputtext-sm"  />
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="email2">Fecha Fin</label>
+                                <input pInputText id="email2" type="text" class="p-inputtext-sm" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    
+                <div class="flex flex-wrap gap-4 border border-surface rounded-border m-2 p-1 bg-gray-600" style="margin-top: -2px;margin-bottom: -6px;">
+                    <div class="font-semibold text-lg text-white " style="margin-left: 10;">&nbsp;Detalle</div>
+                </div>
+                <div class="border border-surface rounded-border m-2 p-0 flex flex-col gap-6">
+                    <p-table #dt 
+                        [value]="listOrders" 
+                        [scrollable]="true" 
+                        scrollHeight="300px" 
+                        styleClass="mt-4" 
+                        selectionMode="single" 
+                        [(selection)]="selectedOrder" 
+                        (onRowSelect)="onRowSelect($event)"
+                        (onRowDblclick)="onRowDoubleClick($event)">
+                        <ng-template #header>
+                            <tr>
+                                <th style="min-width:200px;" pFrozenColumn class="font-bold bg">Name</th>
+                                <th style="min-width:100px">Id</th>
+                                <th style="min-width:200px">orderDate</th>
+                                <th style="min-width:200px">customerId</th>
+                                <th style="min-width:200px">Status</th>
+                                <th style="min-width:200px" alignFrozen="right" pFrozenColumn [frozen]="balanceFrozen" [ngClass]="{ 'font-bold': balanceFrozen }">totalAmount</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template #body let-listOrders>
+                            <tr [pSelectableRow]="listOrders" [pSelectableRowDblClick]="true">
+                                <td pFrozenColumn class="font-bold">{{ listOrders.id }}</td>
+                                <td style="min-width:100px">{{ listOrders.id }}</td>
+                                <td>{{ listOrders.orderDate }}</td>
+                                <td>{{ listOrders.customerId }}</td>
+                                <td>{{ listOrders.status }}</td>
+                                <td>{{ listOrders.totalAmount }}</td>
+                                <!-- <td alignFrozen="right" pFrozenColumn [frozen]="balanceFrozen" [ngClass]="{ 'font-bold': balanceFrozen }">
+                                    {{ formatCurrency(customer.balance) }}
+                                </td> -->
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+ </div>
+                
+ <div class="border border-surface rounded-border m-2 p-0 flex flex-col gap-6">
+                <div class="flex flex-wrap gap-4 border border-surface rounded-border m-2 p-1  bg-gray-600" style="margin-top: 10px; margin-bottom: -6px;">
+                    <div class="font-semibold text-lg text-white " style="margin-left: 10;">&nbsp;JSON Data</div>
+                </div>
+                <div class="border border-surface rounded-border m-2 p-2 flex flex-row gap-6">
+                    
+                    <div class="card p-4 border border-gray-300 flex-1">
+                        <div class="font-bold mb-2">Request JSON:</div>
+                        <pre class="text-xs p-2 bg-gray-100 rounded overflow-auto text-black" style="white-space: pre-wrap;">{{ requestJson }}</pre>
+                    </div>
+
+                    <div class="card p-4 border border-gray-300 flex-1">
+                        <div class="font-bold mb-2 ">Response JSON:</div>
+                        <pre class="text-xs p-2 bg-gray-100 rounded overflow-auto text-black" style="white-space: pre-wrap;">{{ responseJson }}</pre>
+                    </div>
+                    
+                </div>
+                
+ </div>
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,239 @@
+    <p-toast></p-toast>
+            <div class="flex flex-wrap gap-6 justify-between items-center">
+               <p-tabs [value]="activeTabIndex" (onChange)="onTabChange($event)"> 
+                <p-tablist>
+                    <p-tab [value]="0" (click)="showGeneralView()">General</p-tab>
+                    <p-tab [value]="1" (click)="showMonitorView()">Monitor</p-tab>
+                </p-tablist>
+            </p-tabs>
+               <!--<div class="!ml-auto mr-80">
+                    <div class="font-bold text-xl mb-4">Monitor de Cotizaciones</div> 
+                </div> -->
+
+                <div class="flex-grow justify-between"></div>
+                <div class="border border-surface rounded-border m-2 p-1 bg-gray-600" style="margin-right: 35px;">
+                                <div class="font-bold text-lg text-secondary m-1 p-0 text-white">Inventario. </div> 
+                                
+                </div>
+            </div>
+
+
+ <div class="card" *ngIf="isGeneralVisible">   
+
+                <p-toolbar styleClass="mb-1 flex" style="margin: 5px;">
+                    <ng-template #start>
+                                <!-- <p-button label="Atras" icon="pi pi-angle-left" severity="secondary"  size="small"  text (click)="actionBackwards()" /> -->
+                                <!-- <p-button label="Siguiente" icon="pi pi-angle-right"  iconPos="right" severity="secondary" size="small"  text    
+                                [disabled]="isgeneralDropdownEstadoDisabled" />      -->
+                                <!-- <p-button label="Siguiente" icon="pi pi-angle-right"  iconPos="right" severity="secondary" size="small"  text (click)="actionFordward()"/> -->
+                                <p-button label="Limpiar" icon="pi pi-trash" severity="secondary"  size="small" text="true" 
+                                (click)="clearGeneralFormValues()" />
+                    </ng-template>
+
+                    <ng-template #end>
+                        <p-button label="Export" icon="pi pi-upload" severity="secondary" size="small"   />
+                    </ng-template>
+                </p-toolbar>
+
+                <div class="border border-surface rounded-border m-2 p-2 flex flex-col gap-6 ">
+                    <div class="card ">
+                        <div class="flex flex-wrap gap-6">
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="generalFormProducto">Producto</label>
+                                <input pInputText id="generalFormProducto" disabled ="text" class="p-inputtext-sm" [(ngModel)]="selectedInventory!.productId"/>
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="generalFormSucursal">Sucursal</label>
+                                <input pInputText id="generalFormSucursal" disabled type="text" class="p-inputtext-sm" [(ngModel)]="selectedInventory!.branchName"/>
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="generalFormfechaAdquisicion">Fecha Aduisicion</label>
+                                <!-- <p-datepicker [showIcon]="true" [showButtonBar]="true" disabled [(ngModel)]="selectedInventory!.dateReceived"></p-datepicker> -->
+                                <input pInputText id="generalFormfechaAdquisicion" disabled type="text" class="p-inputtext-sm" [(ngModel)]="selectedInventory!.dateReceived"/>
+                            </div>
+                        </div>
+                        <p></p>
+                        <div class="flex flex-wrap gap-6">
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="name2">Estado</label>
+                                <p-select [(ngModel)]="generalDropdownEstadoModel" [options]="generalDropdownEstadoValues" optionLabel="name" placeholder="Select" style="font-size: 12px;"  />
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="generalFormCantidad">Cantidad</label>
+                                <input pInputText id="generalFormCantidad" disabled type="text" class="p-inputtext-sm" [(ngModel)]="selectedInventory!.quantity"/>
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="generalFormCosto">Costo de Adquisicion</label>
+                                <input pInputText id="generalFormCosto" disabled type="text" class="p-inputtext-sm" [(ngModel)]="selectedInventory!.acquisitionCost"/>
+                            </div>
+                                <!-- <input pInputText id="fechaFinal" type="text" class="p-inputtext-sm" [(ngModel)]="monitorFormFechaFinal"/> -->
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="flex flex-wrap gap-4 border border-surface rounded-border m-2 p-1 bg-gray-600" style="margin-top: -2px;margin-bottom: -6px;">
+                    <div class="font-semibold text-lg text-white " style="margin-left: 10;">&nbsp;Ultimos 10 Movimientos</div>
+                </div>
+                
+                <div class="border border-surface rounded-border m-2 p-0 flex flex-col gap-6">
+                    <p-table #dt 
+                        [value]="lstMovements" 
+                        [scrollable]="true" 
+                        scrollHeight="300px" 
+                        styleClass="mt-4" 
+                        selectionMode="single">
+                        <ng-template #header>
+                            <tr>
+                                <!-- <th style="min-width:200px;" pFrozenColumn class="font-bold bg">Id</th> -->
+                                <!-- <th style="min-width:100px">Id</th> -->
+                                <th style="min-width:200px">inventoryUnitId</th>
+                                <th style="min-width:200px">Tipo de Movimiento</th>
+                                <th style="min-width:200px">Fecha Movimiento</th>
+                                <th style="min-width:200px">Documento Referencia</th>
+                                <th style="min-width:200px">Tipo</th>
+                                <th style="min-width:200px">Cantidad</th>
+                                <th style="min-width:200px">Sucursal</th>
+                                <!-- <th style="min-width:200px" alignFrozen="right" pFrozenColumn [frozen]="balanceFrozen" [ngClass]="{ 'font-bold': balanceFrozen }">toBranch</th> -->
+                            </tr>
+                        </ng-template>
+                        <ng-template #body let-lstMovements>
+                            <tr>
+                                <!-- <td pFrozenColumn class="font-bold">{{ lstMovements.id }}</td> -->
+                                <td style="min-width:100px">{{ lstMovements.inventoryUnitId }}</td>
+                                <td>{{ lstMovements.movementType }}</td>
+                                <td>{{ lstMovements.movementDate }}</td>
+                                <td>{{ lstMovements.documentReference }}</td>
+                                <td>{{ lstMovements.quantityType }}</td>
+                                <td>{{ lstMovements.quantity }}</td>
+                                <td>{{ lstMovements.fromBranch }}</td>
+                                <!-- <td>{{ lstMovements.toBranch }}</td> -->
+                                <!-- <td alignFrozen="right" pFrozenColumn [frozen]="balanceFrozen" [ngClass]="{ 'font-bold': balanceFrozen }">
+                                    {{ formatCurrency(customer.balance) }}
+                                </td> -->
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+
+
+ </div>
+
+
+ <div class="card" *ngIf="isMonitorVisible">   
+    
+                <p-toolbar styleClass="mb-1 flex" style="margin: 5px;">
+                    <ng-template #start>
+                                <p-button label="Buscar" icon="pi pi-search" severity="primary"  size="small"  text (click)="loadListInventoriesProducts()"/>
+                                <p-button label="Limpiar" icon="pi pi-trash" severity="secondary"  size="small" text (click)="clearMonitorFormValues()"/>
+                                <p-button label="Actulizar Stock" icon="pi pi-trash" severity="secondary"  size="small" text (click)="updateStockShowInput()"/>
+                    </ng-template>
+                    <ng-template #end>
+                        <p-button label="Export" icon="pi pi-upload" severity="secondary" size="small"/>
+                    </ng-template>
+                </p-toolbar>
+
+                <div class="border border-surface rounded-border m-2 p-2 flex flex-col gap-6 ">
+                    <div class="card ">
+                        <div class="flex flex-wrap gap-6">
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="monitorIdBranch">Id Sucursal</label>
+                                <input pInputText id="monitorIdBranch" type="text" class="p-inputtext-sm" [(ngModel)]="monitorFormIdBranch"/>
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="fechaInicio">Fecha Inicio</label>
+                                <p-datepicker [showIcon]="true" [showButtonBar]="true" [(ngModel)]="monitorFormFechaInicio"></p-datepicker>
+                                <!-- <input pInputText id="fechaInicio" type="text" class="p-inputtext-sm" [(ngModel)]="monitorFormFechaInicio" /> -->
+                            </div>
+                            <div class="flex flex-col-12 grow basis-0 gap-1">
+                            </div>
+                            <!-- <div class="flex flex-col items-center justify-center p-3 border rounded bg-surface-100 h-full">
+                                <div class="text-xl font-bold text-gray-700">Total Items</div>
+                                <div class="text-4xl font-extrabold text-green-600">106</div> 
+                            </div> -->
+                        </div>
+                        <p></p>
+                        <div class="flex flex-wrap gap-6">
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="name2">Estado</label>
+                                <p-select [(ngModel)]="monitorDropdownEstadoModel" [options]="monitorDropdownEstadoValues" (onChange)="onSelectionChange($event)" optionLabel="name" placeholder="Select" style="font-size: 12px;"  />
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="fechaFinal">Fecha Fin</label>
+                                <p-datepicker [showIcon]="true" [showButtonBar]="true" [(ngModel)]="monitorFormFechaFinal"></p-datepicker>
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                            </div>
+                                <!-- <input pInputText id="fechaFinal" type="text" class="p-inputtext-sm" [(ngModel)]="monitorFormFechaFinal"/> -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-4 border border-surface rounded-border m-2 p-1 bg-gray-600" style="margin-top: -2px;margin-bottom: -6px;">
+                    <div class="font-semibold text-lg text-white " style="margin-left: 10;">&nbsp;Detalle</div>
+                </div>
+
+                <div class="border border-surface rounded-border m-2 p-0 flex flex-col gap-6">
+                    <p-table #dt 
+                        [value]="lstInventory" 
+                        [scrollable]="true" 
+                        scrollHeight="300px" 
+                        styleClass="mt-4" 
+                        selectionMode="single" 
+                        [(selection)]="selectedInventory" 
+                        (onRowSelect)="onRowSelect($event)"
+                        (onRowDblclick)="onRowDoubleClick($event)">
+                        <ng-template #header>
+                            <tr>
+                                <!-- <th style="width: 3rem">
+                                    <p-tableHeaderCheckbox />
+                                </th> -->
+                                <!-- <th style="min-width:200px;" pFrozenColumn class="font-bold bg">Id</th> -->
+                                <!-- <th style="min-width:100px">Id</th> -->
+                                <th style="min-width:200px">Producto</th>
+                                <th style="min-width:200px">Fecha Recibido</th>
+                                <!-- <th style="min-width:200px">manufactureDate</th> -->
+                                <th style="min-width:200px">Estatus</th>
+                                <th style="min-width:200px">Nombre Branch</th>
+                                <th style="min-width:200px">Cantidad</th>
+                                <!-- <th style="min-width:200px">branchId</th> -->
+                                <th style="min-width:200px" alignFrozen="right" pFrozenColumn [frozen]="balanceFrozen" [ngClass]="{ 'font-bold': balanceFrozen }">Costo de Adquisicion</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template #body let-lstInventory let-rowIndex="rowIndex">
+                            <tr [pSelectableRow]="lstInventory" [pSelectableRowDblClick]="true">
+
+                                <!-- <td style="width: 3rem">
+                                    <p-tableCheckbox [value]="lstInventory" />
+                                </td> -->
+                                <!-- <td pFrozenColumn class="font-bold">{{ lstInventory.id }}</td> -->
+                                <td style="min-width:100px">{{ lstInventory.productId }}</td>
+                                <td>{{ lstInventory.dateReceived }}</td>
+                                <!-- <td>{{ lstInventory.manufactureDate }}</td> -->
+                                <td> <p-tag [value]="lstInventory!.status" [severity]="getStockSeverity(lstInventory!.status)" /></td>
+                                <td>{{ lstInventory.branchName }}</td>
+                                <ng-container *ngIf="isRowAbleToBeSelected">
+                                <td><input 
+                                        type="number" 
+                                        pInputText 
+                                        [value]="lstInventory.quantity" 
+                                        (change)="onQuantityChange($event, lstInventory, rowIndex,lstInventory.quantity)"
+                                        style="width: 40%; text-align: right;" 
+                                        min="0"
+                                    /></td>
+                                </ng-container>
+                                
+                                <ng-container *ngIf="!isRowAbleToBeSelected">
+                                    <td>{{ lstInventory.quantity }}</td>
+                                </ng-container>
+                                <!-- <td>{{ lstInventory.branchId }}</td> -->
+                                <td><b>{{ lstInventory.acquisitionCost | currency: 'USD'}}</b></td>
+                                <!-- <td alignFrozen="right" pFrozenColumn [frozen]="balanceFrozen" [ngClass]="{ 'font-bold': balanceFrozen }">
+                                    {{ formatCurrency(customer.balance) }}
+                                </td> -->
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+                
+ </div>
