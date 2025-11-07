@@ -25,6 +25,16 @@ public class MessageProducerService {
         System.out.println("Message sent to SQS queue: " + messagePayload);
 
     }
+    public void sendToProducts(String messagePayload) {
+        // Use the send method, specifying the queue name and the message payload
+        sqsTemplate.send("queue-to-product", messagePayload);
+
+        // Alternatively, to send a complex object:
+        // sqsTemplate.send(QUEUE_NAME, new MyObject("data", 123));
+
+        System.out.println("Message sent to SQS queue to product: " + messagePayload);
+
+    }
 //    public void send(String messagePayload, String infoAttributeValue) {
 //
 //        sqsTemplate.send(options -> options

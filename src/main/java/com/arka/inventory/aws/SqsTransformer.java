@@ -1,5 +1,6 @@
 package com.arka.inventory.aws;
 
+import com.arka.inventory.dto.queue.InventoryQueueItemStockProductMessage;
 import com.arka.inventory.dto.restobjects.InventoryMovementRequestDto;
 import com.arka.inventory.entity.InventoryTransaction;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -90,6 +91,16 @@ public class SqsTransformer {
      * @return A Mono emitting the resulting JSON array string.
      */
     public Mono<String> listToString(List<InventoryTransaction> dtoList) {
+        return Mono.fromCallable(() -> {
+            try {
+                // Serialize the List object into a JSON array string
+                return objectMapper.writeValueAsString(dtoList);
+            } catch (IOException e) {
+                throw new IllegalStateException("Failed to serialize DTO List to JSON string.", e);
+            }
+        });
+    }
+    public Mono<String> listQueueToProductToString(List<InventoryQueueItemStockProductMessage> dtoList) {
         return Mono.fromCallable(() -> {
             try {
                 // Serialize the List object into a JSON array string

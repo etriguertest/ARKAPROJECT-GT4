@@ -5,6 +5,7 @@ import com.arka.inventory.aws.SnsPublisherService;
 import com.arka.inventory.aws.SqsTransformer;
 import com.arka.inventory.dto.enums.InventoryMovementType;
 import com.arka.inventory.dto.enums.StockChangeType;
+import com.arka.inventory.dto.queue.InventoryQueueItemStockProductMessage;
 import com.arka.inventory.dto.restobjects.InventoryMovementRequestDto;
 import com.arka.inventory.dto.restobjects.InventoryUpdateItemRequest;
 import com.arka.inventory.entity.Inventory;
@@ -85,6 +86,7 @@ public class InventoryMovementServiceImpl implements InventoryMovementService{
         System.out.println("Guardando inventoryTransactionList");
         List<InventoryTransaction> inventoryTransactionList = new ArrayList<>();
         int productType=inventoryUpdateItemRequests.get(0).getType();
+        List<InventoryQueueItemStockProductMessage> lstInventoryQueueToProduc = new ArrayList<>();
         for (Inventory item : transaction){
             InventoryTransaction movement = new InventoryTransaction();
             movement.setInventoryUnitId(item.getId());
@@ -101,26 +103,42 @@ public class InventoryMovementServiceImpl implements InventoryMovementService{
 
             }
             movement.setMovementDate(LocalDate.now());
-            movement.setDocumentReference("PEDIDO#XX");
             movement.setIdOperator(Long.valueOf("1"));
             movement.setNameOperator("Juan Perez");
             movement.setFromBranch(item.getBranchId());
-            int quantity = inventoryUpdateItemRequests.stream()
+//            int quantity = inventoryUpdateItemRequests.stream()
+//                    .filter(request -> request.getProductId().equals(item.getProductId())) // Filter by matching ID
+//                    .findFirst() // Get the first match
+//                    .map(updateItemRequest -> updateItemRequest.getQuantity()) // Extract the quantity
+//                    .orElse(0); // Default to 0 if not found
+            InventoryUpdateItemRequest matchingRequest = inventoryUpdateItemRequests.stream()
                     .filter(request -> request.getProductId().equals(item.getProductId())) // Filter by matching ID
-                    .findFirst() // Get the first match
-                    .map(updateItemRequest -> updateItemRequest.getQuantity()) // Extract the quantity
-                    .orElse(0); // Default to 0 if not found
+                    .findFirst() // Returns Optional<InventoryUpdateItemRequest>
+                    .orElse(new InventoryUpdateItemRequest());
 
-            movement.setQuantity(quantity);
-            System.out.println("quzntiyus"+quantity);
+            movement.setQuantity(matchingRequest.getQuantity());
+            System.out.println("quzntiyus"+matchingRequest.getQuantity());
             inventoryTransactionList.add(movement);
+            movement.setDocumentReference(matchingRequest.getNumOrder() != null
+                    ? matchingRequest.getNumOrder().toString()
+                    : "");
+
+
+            InventoryQueueItemStockProductMessage inventoryQueueItemStockProductMessage = new InventoryQueueItemStockProductMessage();
+            inventoryQueueItemStockProductMessage.setId(item.getProductId());
+            inventoryQueueItemStockProductMessage.setStock(item.getQuantity());
+            lstInventoryQueueToProduc.add(inventoryQueueItemStockProductMessage);
         }
 
         SqsTransformer sqsTransformer = new SqsTransformer();
         Mono<String> monoString = sqsTransformer.listToString(inventoryTransactionList);
         String result = monoString.block();
+        Mono<String> monoStringQueue = sqsTransformer.listQueueToProductToString(lstInventoryQueueToProduc);
+        String resultQueue = monoStringQueue.block();
         System.out.println("result");
+        System.out.println("resultQueue");
 //        messageProducerService.send(result);
+        messageProducerService.sendToProducts(resultQueue);
         snsPublisherService.publishNotification("MOVIMIENTO-INVENTARIO",result);
         return Mono.just(true);
 
