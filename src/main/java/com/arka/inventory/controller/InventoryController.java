@@ -29,10 +29,6 @@ public class InventoryController {
         return inventoryServiceImpl.findAll();
     }
 
-//    @GetMapping("/{id}")
-//    public Mono<InventoryDto> getInventoryById(@PathVariable Long id) {
-//        return inventoryService.findById(id).map(InventoryDto::fromEntity);
-//    }
     @GetMapping("/product/{id}")
     public Mono<InventoryDtoResp> getInventoryByIdCustom(@PathVariable Long id) {
         return inventoryServiceImpl.findByIdCustom(id);
@@ -79,29 +75,6 @@ public class InventoryController {
                 ))
                 .flatMap(inventoryServiceImpl::save);
     }
-    @GetMapping("/ejemplo")
-    public Mono<String> holaMundo() {
-
-        WebClient client = WebClient.create("https://jsonplaceholder.typicode.com");
-
-        // Llamada REST que devuelve un Mono<String>
-        Mono<String> response = client.get()
-                .uri("/posts/1") // recurso dummy
-                .retrieve()
-                .bodyToMono(String.class);
-
-        // Suscripción al Mono
-        response.subscribe(
-                valor -> System.out.println("onNext: " + valor),   // cuando llega la respuesta
-                error -> System.err.println("onError: " + error), // si ocurre error
-                () -> System.out.println("onComplete: flujo terminado") // cuando finaliza
-
-        );
-
-        // ⚠️ Como es un flujo reactivo asíncrono, damos un pequeño sleep
-        try { Thread.sleep(3000); } catch (InterruptedException e) { }
-        return Mono.just("null");
-    }
 
     @GetMapping("/by-date-range")
     public Flux<Inventory> getInventoryByDateRange(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
@@ -114,8 +87,6 @@ public class InventoryController {
     }
 
 
-
-    // New endpoint to handle different decrease values per product
     @PostMapping("/update-quantities")
     public Mono<InventoryUpdateItemResponse> updateInventoryQuantities(@RequestBody List<InventoryUpdateItemRequest> updateItems) {
         try {

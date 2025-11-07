@@ -1,4 +1,4 @@
-package com.arka.inventory.dto.restobjects;
+package com.arka.inventory.dto.queue;
 
 import com.arka.inventory.entity.InventoryTransaction;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class InventoryMovementRequestDto {
+public class InventoryQueueMovementMessage {
     private Long inventoryUnitId;
     private String movementType;
     private LocalDate movementDate;

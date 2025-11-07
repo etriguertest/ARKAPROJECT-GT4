@@ -1,6 +1,6 @@
 package com.arka.inventory.service;
 
-import com.arka.inventory.dto.restobjects.InventoryMovementRequestDto;
+import com.arka.inventory.dto.queue.InventoryQueueMovementMessage;
 import com.arka.inventory.dto.restobjects.InventoryUpdateItemRequest;
 import com.arka.inventory.entity.Inventory;
 import com.arka.inventory.entity.InventoryTransaction;
@@ -16,7 +16,7 @@ public interface InventoryMovementService {
      * @param transaction The transaction to be saved.
      * @return A Mono emitting the saved transaction.
      */
-    Mono<InventoryTransaction> insert(InventoryMovementRequestDto transaction);
+    Mono<InventoryTransaction> insert(InventoryQueueMovementMessage transaction);
 
     /**
      * Finds all inventory transactions that occurred within the specified date range.

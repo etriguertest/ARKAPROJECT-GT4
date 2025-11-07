@@ -44,6 +44,7 @@ public class InventoryServiceImpl implements InventoryService{
     public Mono<Inventory> findById(Long id) {
         return inventoryRepository.findById(id);
     }
+
     public Mono<CheckIfExistStockResponse> checkIfExistStockOfListProduct(List<Long> updateItems, Integer quantity) {
         // 1. Get a Flux of Inventory items that match the criteria
         Flux<Inventory> inventoryFlux = inventoryRepository.findByProductIdInAndQuantityGreaterThan(updateItems, quantity);
@@ -105,12 +106,7 @@ public class InventoryServiceImpl implements InventoryService{
                     return response;
                 });
     }
-    /**
-     * Correctly fetches three pieces of data (Inventory, Product, Branch) in parallel
-     * and combines them into a single DTO.
-     * * @param id The ID of the Inventory item to fetch.
-     * @return A Mono emitting the fully populated InventoryDtoResp.
-     */
+
     public Mono<InventoryDtoResp> findByIdCustom(Long id) {
         // 1. Start by fetching the initial inventory item
         return inventoryRepository.findByProductId(id)

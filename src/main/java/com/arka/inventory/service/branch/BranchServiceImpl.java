@@ -1,4 +1,4 @@
-package com.arka.inventory.service;
+package com.arka.inventory.service.branch;
 
 import com.arka.inventory.dto.BranchDto;
 import com.arka.inventory.entity.Branch;

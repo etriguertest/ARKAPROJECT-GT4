@@ -2,7 +2,7 @@ package com.arka.inventory.controller;
 
 import com.arka.inventory.dto.BranchDto;
 import com.arka.inventory.entity.Branch;
-import com.arka.inventory.service.BranchServiceImpl;
+import com.arka.inventory.service.branch.BranchServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;

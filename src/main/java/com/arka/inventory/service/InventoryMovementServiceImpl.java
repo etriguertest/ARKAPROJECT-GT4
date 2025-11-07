@@ -6,7 +6,7 @@ import com.arka.inventory.aws.SqsTransformer;
 import com.arka.inventory.dto.enums.InventoryMovementType;
 import com.arka.inventory.dto.enums.StockChangeType;
 import com.arka.inventory.dto.queue.InventoryQueueItemStockProductMessage;
-import com.arka.inventory.dto.restobjects.InventoryMovementRequestDto;
+import com.arka.inventory.dto.queue.InventoryQueueMovementMessage;
 import com.arka.inventory.dto.restobjects.InventoryUpdateItemRequest;
 import com.arka.inventory.entity.Inventory;
 import com.arka.inventory.entity.InventoryTransaction;
@@ -28,7 +28,7 @@ public class InventoryMovementServiceImpl implements InventoryMovementService{
     private final SnsPublisherService snsPublisherService;
 
     @Override
-    public Mono<InventoryTransaction> insert(InventoryMovementRequestDto transaction) {
+    public Mono<InventoryTransaction> insert(InventoryQueueMovementMessage transaction) {
 
         System.out.println("insert");
         // Here you would add validation/business logic before saving.

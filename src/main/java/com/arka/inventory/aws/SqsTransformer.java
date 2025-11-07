@@ -1,7 +1,7 @@
 package com.arka.inventory.aws;
 
 import com.arka.inventory.dto.queue.InventoryQueueItemStockProductMessage;
-import com.arka.inventory.dto.restobjects.InventoryMovementRequestDto;
+import com.arka.inventory.dto.queue.InventoryQueueMovementMessage;
 import com.arka.inventory.entity.InventoryTransaction;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,11 +29,11 @@ public class SqsTransformer {
      * * @param jsonString The raw message body received from SQS.
      * @return A Mono emitting the deserialized DTO.
      */
-    public Mono<InventoryMovementRequestDto> toDto(String jsonString) {
+    public Mono<InventoryQueueMovementMessage> toDto(String jsonString) {
         return Mono.fromCallable(() -> {
             try {
                 // Deserialize the JSON string into the target DTO class
-                return objectMapper.readValue(jsonString, InventoryMovementRequestDto.class);
+                return objectMapper.readValue(jsonString, InventoryQueueMovementMessage.class);
             } catch (IOException e) {
                 // Wrap the checked exception in a runtime exception for the reactive stream
                 throw new IllegalStateException("Failed to deserialize SQS message body to DTO: " + jsonString, e);
@@ -46,14 +46,14 @@ public class SqsTransformer {
      * * @param jsonArrayString The raw message body (expected to be a JSON array).
      * @return A Flux emitting the deserialized DTOs one by one.
      */
-    public Flux<InventoryMovementRequestDto> convertJsonStringToFlux(String jsonString) {
+    public Flux<InventoryQueueMovementMessage> convertJsonStringToFlux(String jsonString) {
 
         // 1. Define the target type: a List of your DTO.
-        TypeReference<List<InventoryMovementRequestDto>> listType =
+        TypeReference<List<InventoryQueueMovementMessage>> listType =
                 new TypeReference<>() {};
         try {
             // 2. Deserialize the JSON string into the List.
-            List<InventoryMovementRequestDto> dtoList =
+            List<InventoryQueueMovementMessage> dtoList =
                     objectMapper.readValue(jsonString, listType);
             // 3. Convert the List (Iterable) into a Flux.
             return Flux.fromIterable(dtoList);
@@ -71,7 +71,7 @@ public class SqsTransformer {
      * @param dto The DTO object to be serialized.
      * @return A Mono emitting the resulting JSON string.
      */
-    public Mono<String> toString(InventoryMovementRequestDto dto) {
+    public Mono<String> toString(InventoryQueueMovementMessage dto) {
         return Mono.fromCallable(() -> {
             try {
                 // Serialize the DTO object into a JSON string
