@@ -12,6 +12,9 @@ public class Sale {
     @Id
     private Long id;
     private Long orderId;
+    private Long customerId;
+    private String customerName;
     private BigDecimal total;
     private OffsetDateTime createdAt;
+    private BigDecimal impuesto;
 }

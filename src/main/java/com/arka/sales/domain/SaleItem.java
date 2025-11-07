@@ -14,4 +14,5 @@ public class SaleItem {
     private Long productId;
     private Integer quantity;
     private BigDecimal price;
+    private String productName;
 }

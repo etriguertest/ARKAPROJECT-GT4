@@ -14,6 +14,12 @@ public class WebClientConfig {
     @Value("${external.order-service-base-url}")
     private String orderBaseUrl;
 
+    @Value("${external.product-service-base-url}")
+    private String productBaseUrl;
+
+    @Value("${external.customer-service-base-url}")
+    private String customerBaseUrl;
+
     @Value("${external.webclient.connect-timeout-ms:5000}")
     private int connectTimeoutMs;
 
@@ -24,6 +30,34 @@ public class WebClientConfig {
 
         return WebClient.builder()
                 .baseUrl(orderBaseUrl)
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .exchangeStrategies(ExchangeStrategies.builder().codecs(configurer -> {
+                }).build())
+                .build();
+    }
+
+
+    @Bean("productWebClient")
+    public WebClient productWebClient() {
+        HttpClient httpClient = HttpClient.create()
+                .responseTimeout(Duration.ofMillis(connectTimeoutMs));
+
+        return WebClient.builder()
+                .baseUrl(productBaseUrl)
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .exchangeStrategies(ExchangeStrategies.builder().codecs(configurer -> {
+                }).build())
+                .build();
+    }
+
+
+    @Bean("customerWebClient")
+    public WebClient customerWebClient() {
+        HttpClient httpClient = HttpClient.create()
+                .responseTimeout(Duration.ofMillis(connectTimeoutMs));
+
+        return WebClient.builder()
+                .baseUrl(customerBaseUrl)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .exchangeStrategies(ExchangeStrategies.builder().codecs(configurer -> {
                 }).build())

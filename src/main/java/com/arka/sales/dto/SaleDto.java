@@ -10,6 +10,7 @@ import java.util.List;
 public class SaleDto {
     private Long id;
     private Long orderId;
+    private Long customerId;
     private BigDecimal total;
     private OffsetDateTime createdAt;
     private List<SaleItemDto> items;
