@@ -14,8 +14,8 @@ RUN npm install
 # Copiamos el resto del código fuente del proyecto
 COPY . .
 
-# Ejecutamos el build de producción (como dice tu README)
-RUN ng build --configuration production
+# Ejecutamos el build de producción 
+RUN npx ng build --configuration production
 
 # --- ETAPA 2: Publicación (Serve Stage) ---
 # Usamos una imagen de Nginx muy ligera
