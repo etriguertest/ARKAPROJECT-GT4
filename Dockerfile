@@ -17,16 +17,19 @@ COPY . .
 # Ejecutamos el build de producción 
 RUN npx ng build --configuration production
 
+
+# AGREGAMOS ESTO PARA DEPURAR: Muestra lo que hay en dist/sakai-ng
+# Verás una carpeta llamada 'browser' en la salida del build
+RUN ls -la /app/dist/sakai-ng
+
 # --- ETAPA 2: Publicación (Serve Stage) ---
 # Usamos una imagen de Nginx muy ligera
 FROM nginx:1.27-alpine
 
-# IMPORTANTE: Reemplaza 'nombre-de-tu-proyecto'
-# después de ejecutar 'ng build'. (Ej: /app/dist/mi-app)
-COPY --from=build /app/dist/sakai-ng /usr/share/nginx/html
+# CORREGIMOS LA RUTA: Añadimos '/browser' al final
+COPY --from=build /app/dist/sakai-ng/browser /usr/share/nginx/html
 
 # Copiamos nuestro archivo de configuración personalizado de Nginx
-# Este archivo lo crearemos en el siguiente paso.
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Exponemos el puerto 8080 (esto debe coincidir con tu 'deploy.yml')
