@@ -18,10 +18,12 @@ import { OrderLayout } from './order/orderLayout';
 import { InventoryLayout } from './inventory/inventoryLayout';
 import { ProductLayout } from './product/productLayout';
 import { MovementLayout } from './movements/movementLayout';
+import { PedidoLayout } from './pedido/pedidoLayout';
 
 export default [
     { path: 'product', data: { breadcrumb: 'auth' }, component: ProductLayout },
     { path: 'order', data: { breadcrumb: 'auth' }, component: OrderLayout },
+    { path: 'pedido', data: { breadcrumb: 'auth' }, component: PedidoLayout },
     { path: 'inventory', data: { breadcrumb: 'auth' }, component: InventoryLayout }, 
     { path: 'movements', data: { breadcrumb: 'auth' }, component:  MovementLayout }, 
     { path: 'button', data: { breadcrumb: 'Button' }, component: ButtonDemo },

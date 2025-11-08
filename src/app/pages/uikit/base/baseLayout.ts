@@ -21,7 +21,7 @@ import { StepperModule } from 'primeng/stepper';
 import { TabsModule } from 'primeng/tabs';
 import { ButtonGroupModule } from 'primeng/buttongroup';
 import { ToolbarModule } from 'primeng/toolbar';
-import { InventoryMovement, InventoryService } from '@/pages/service/Inventory.service';
+import { InventoryMovementDto, InventoryService } from '@/pages/service/Inventory.service';
 import { OrderDto, OrderItemsDto, OrderService } from '@/pages/service/order.service';
 interface expandedRows {
     [key: string]: boolean;
@@ -68,7 +68,7 @@ interface expandedRows {
 export class InventoryLayout implements OnInit {
     private inventoryService = inject(InventoryService);
     private orderService = inject(OrderService);
-    movements: InventoryMovement[] = [];//| null = null;
+    movements: InventoryMovementDto[] = [];//| null = null;
     listOrders: OrderDto[] = [];//| null = null;
     orderDetail: OrderDto | null = null;
     lstOrderDetail: OrderItemsDto [] = [];

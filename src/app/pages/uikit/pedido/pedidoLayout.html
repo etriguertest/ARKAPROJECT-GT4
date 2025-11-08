@@ -1,0 +1,229 @@
+    <p-toast></p-toast>
+            <div class="flex flex-wrap gap-6 justify-between items-center">
+               <p-tabs [value]="activeTabIndex" (onChange)="onTabChange($event)"> 
+                <p-tablist>
+                    <p-tab [value]="0" (click)="showGeneralView()">General</p-tab>
+                    <p-tab [value]="1" (click)="showMonitorView()">Monitor</p-tab>
+                </p-tablist>
+            </p-tabs>
+               <!--<div class="!ml-auto mr-80">
+                    <div class="font-bold text-xl mb-4">Monitor de Cotizaciones</div> 
+                </div> -->
+
+                <div class="flex-grow justify-between"></div>
+                <div class="border border-surface rounded-border m-2 p-1 bg-gray-600" style="margin-right: 35px;">
+                                <div class="font-bold text-lg text-secondary m-1 p-0 text-white">Pedidos. </div> 
+                                
+                </div>
+            </div>
+
+
+ <div class="card" *ngIf="isGeneralVisible">   
+                <p-toolbar styleClass="mb-1 flex" style="margin: 5px;">
+                    <ng-template #start>
+                                <!-- <p-button label="Atras" icon="pi pi-angle-left" severity="secondary"  size="small"  text (click)="actionBackwards()" /> -->
+                                <!-- <p-button label="Siguiente" icon="pi pi-angle-right"  iconPos="right" severity="secondary" size="small"  text    
+                                [disabled]="isgeneralDropdownEstadoDisabled" />      -->
+                                <!-- <p-button label="Siguiente" icon="pi pi-angle-right"  iconPos="right" severity="secondary" size="small"  text (click)="actionFordward()"/> -->
+                                <p-button label="Limpiar" icon="pi pi-trash" severity="secondary"  size="small" text="true" 
+                                (click)="clearGeneralFormValues()" />
+                    </ng-template>
+
+                    <ng-template #end>
+                        <p-button label="Export" icon="pi pi-upload" severity="secondary" size="small"   />
+                    </ng-template>
+                </p-toolbar>
+
+                <div class="border border-surface rounded-border m-2 p-2 flex flex-col gap-6 ">
+                    <div class="card">
+                        <div class="flex flex-wrap gap-6">
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="generalFormOrderId">Numero Pedido</label>
+                                <input pInputText id="generalFormOrderId" type="text" class="p-inputtext-sm" 
+                                [(ngModel)]="generalFormOrderId"
+                                [disabled]="true"
+                                 />
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="generalFormCustomer">Cliente</label>
+                                <input pInputText id="generalFormCustomer" type="text" class="p-inputtext-sm" 
+                                [(ngModel)]="generalFormCustomer"
+                                [disabled]="true"
+                                 />
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="generalFormStatus">Estatus</label>
+                                <input pInputText id="generalFormStatus" type="text" class="p-inputtext-sm" 
+                                [(ngModel)]="generalFormStatus"
+                                [disabled]="true"
+                                 />
+                            </div>
+                        </div>
+                        <p></p>
+                        <div class="flex flex-wrap gap-6">
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="generalFormOrderDate">Fecha de Pedido</label>
+                                <input pInputText id="generalFormOrderDate" type="text" class="p-inputtext-sm" 
+                                [(ngModel)]="generalFormOrderDate"
+                                [disabled]="true"
+                                 />
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="generalFormConfirmationDate">Fecha Confirmacion</label>
+                                <input pInputText id="generalFormConfirmationDate" type="text" class="p-inputtext-sm" 
+                                [(ngModel)]="generalFormConfirmationDate"
+                                [disabled]="true"
+                                 />
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4 border border-surface rounded-border m-2 p-1 bg-gray-600" style="margin-top: -2px;margin-bottom: -6px;">
+                    
+                    <div class="font-semibold text-lg text-white" style="margin-left: 10;">&nbsp;Detalle</div>
+                    
+                    <div class="ml-auto" style="margin-right: 10px;">
+                        <p-button 
+                            label="Item" 
+                            icon="pi pi-plus" 
+                            styleClass="p-button-sm p-button-secondary" 
+                            >
+                        </p-button>
+                    </div>
+                </div>
+
+                <div class="border border-surface rounded-border m-2 p-0 flex flex-col gap-6">
+                    <p-table #dt 
+                    [value]="lstPedidoDetalle" 
+                    [scrollable]="true" 
+                    scrollHeight="300px" styleClass="mt-4 " >
+                        <ng-template #header>
+                            <tr>
+                                <th style="min-width:200px;" pFrozenColumn class="font-bold bg">productId</th>
+                                <th style="min-width:200px">quantity</th>
+                                <th style="min-width:200px" alignFrozen="right" pFrozenColumn [frozen]="balanceFrozen" [ngClass]="{ 'font-bold': balanceFrozen }">price</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template #body let-lstOrderDetail>
+                            <tr>
+                                <td pFrozenColumn class="font-bold">{{ lstPedidoDetalle }}</td>
+                                <td style="min-width:100px">{{ lstPedidoDetalle }}</td>
+                                <td>{{ lstPedidoDetalle }}</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+                <!-- <br> -->
+
+                <div class="flex flex-col md:flex-row-reverse md:items-end w-full " >
+                    
+                    <div class="w-full md:w-4/10  " >
+                        <div class="container" style="padding-right: 5px;">
+                        <div class="card flex flex-col gap-3 border border-surface rounded-border" >
+
+                            <div class="grid grid-cols-12 gap-4 grid-cols-12 gap-2">
+                                <label for="subtotal" class="flex items-center col-span-12 mb-2 md:col-span-2 md:mb-0">SubTotal</label>
+                                <div class="col-span-12 md:col-span-10">
+                                    <input pInputText id="subtotal" type="text" class="p-inputtext-sm w-full" 
+                                    [(ngModel)]="generalFormSubtotal" 
+                                    [disabled]="true" />
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-12 gap-4 grid-cols-12 gap-2">
+                                <label for="email3" class="flex items-center col-span-12 mb-2 md:col-span-2 md:mb-0">Impuesto</label>
+                                <div class="col-span-12 md:col-span-10">
+                                    <input pInputText id="impuesto" type="text" class="p-inputtext-sm w-full"  
+                                    [(ngModel)]="generalFormImpuesto" 
+                                    [disabled]="true"/>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-12 gap-4 grid-cols-12 gap-2">
+                                <label for="total" class="flex items-center col-span-12 mb-2 md:col-span-2 md:mb-0">Total</label>
+                                <div class="col-span-12 md:col-span-10">
+                                    <input pInputText id="total" type="text" class="p-inputtext-sm w-full" 
+                                    [(ngModel)]="generalFormTotalAmount"
+                                    [disabled]="true"  />
+                                </div>
+                            </div>
+
+                         </div>
+
+                         </div>
+                        </div> 
+                    </div>  
+
+ </div>
+
+
+ <div class="card" *ngIf="isMonitorVisible">   
+    
+                <p-toolbar styleClass="mb-1 flex" style="margin: 5px;">
+                    <ng-template #start>
+                                <p-button label="Buscar" icon="pi pi-search" severity="primary"  size="small"  text (click)="loadListPedidos()"/>
+                                <p-button label="Limpiar" icon="pi pi-trash" severity="secondary"  size="small" text (click)="clearMonitorFormValues()"/>
+                    </ng-template>
+                    <ng-template #end>
+                        <p-button label="Export" icon="pi pi-upload" severity="secondary" size="small"/>
+                    </ng-template>
+                </p-toolbar>
+
+                <div class="border border-surface rounded-border m-2 p-2 flex flex-col gap-6 ">
+                    <div class="card ">
+                        <div class="flex flex-wrap gap-6">
+                            <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="monitorDropdownEstadoModel">Estado</label>
+                                <p-select [(ngModel)]="monitorDropdownEstadoModel" [options]="monitorDropdownEstadoValues" optionLabel="name" placeholder="Select" style="font-size: 12px;"  />
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                            </div>
+                            <div class="flex flex-col grow basis-0 gap-2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-4 border border-surface rounded-border m-2 p-1 bg-gray-600" style="margin-top: -2px;margin-bottom: -6px;">
+                    <div class="font-semibold text-lg text-white " style="margin-left: 10;">&nbsp;Detalle</div>
+                </div>
+
+                <div class="border border-surface rounded-border m-2 p-0 flex flex-col gap-6">
+                    <p-table #dt 
+                        [value]="lstPedidos" 
+                        [scrollable]="true" 
+                        scrollHeight="300px" 
+                        styleClass="mt-4" 
+                        selectionMode="single" 
+                        [(selection)]="selectedPedido" 
+                        (onRowSelect)="onRowSelect($event)">
+                        <ng-template #header>
+                            <tr>
+                                <th style="min-width:200px">idOrder</th>
+                                <th style="min-width:200px">customerId</th>
+                                <th style="min-width:200px">status</th>
+                                <th style="min-width:200px">orderDate</th>
+                                <th style="min-width:200px">confirmationDate</th>
+                                <th style="min-width:200px">totalAmount</th>
+
+                            </tr>
+                        </ng-template>
+                        <ng-template #body let-lstPedidos>
+                            <tr [pSelectableRow]="lstPedidos" [pSelectableRowDblClick]="true">
+                                <td style="min-width:100px">{{ lstPedidos.idOrder }}</td>
+                                <td>{{ lstPedidos.customerId }}</td>
+                                <td>{{ lstPedidos.status }}</td>
+                                <td>{{ lstPedidos.orderDate }}</td>
+                                <td>{{ lstPedidos.confirmationDate }}</td>
+                                <td>{{ lstPedidos.totalAmount }}</td>
+                            </tr>
+
+                        </ng-template>
+                    
+                    </p-table>
+
+                </div>
+
+
+ </div>

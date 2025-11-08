@@ -1,4 +1,5 @@
 {
+  "BASE_URL_ORDERS": "https://64474k7pgh.execute-api.us-east-2.amazonaws.com/dev/order/",
   "BASE_URL_INVENTORY": "https://64474k7pgh.execute-api.us-east-2.amazonaws.com/dev/inventory/",
   "BASE_URL_INVENTORYXX": "http://localhost:8084/",
   "BASE_URL_MOVEMENTS": "https://64474k7pgh.execute-api.us-east-2.amazonaws.com/dev/movement/",

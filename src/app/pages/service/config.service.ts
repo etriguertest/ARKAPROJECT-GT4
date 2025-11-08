@@ -9,6 +9,7 @@ export interface AppConfig {
   BASE_URL_NOTIFICATIONS: string;
   BASE_URL_SELLING: string;
   BASE_URL_SHOPLIST: string;
+  BASE_URL_ORDERS: string;
 }
 
 @Injectable({

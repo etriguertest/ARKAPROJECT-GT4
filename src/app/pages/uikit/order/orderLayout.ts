@@ -325,7 +325,7 @@ export class OrderLayout implements OnInit {
           });
     }
     populateGeneralFormValues(clickedOrder: OrderDto):void{
-        this.generalFormNoPedido = clickedOrder.id ? clickedOrder.id.toString() : null;
+         this.generalFormNoPedido = clickedOrder.id ? clickedOrder.id.toString() : null;
          this.generalFormIdCliente = clickedOrder.customerId ? clickedOrder.customerId.toString() : null;
          this.generalFormTotalAmount = clickedOrder.totalAmount ? clickedOrder.totalAmount.valueOf() : null;
          this.generalFormSubtotal = clickedOrder.totalAmount ? clickedOrder.totalAmount.valueOf() : null;
