@@ -17,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/sales")
 @RequiredArgsConstructor
+@CrossOrigin
 public class SalesController {
 
     private final SalesService salesService;
@@ -44,4 +45,5 @@ public class SalesController {
     public Mono<List<SaleItemDto>> getSaleDetailById(@PathVariable("id") Long id) {
         return salesService.getSaleDetailById(id);
     }
+
 }
