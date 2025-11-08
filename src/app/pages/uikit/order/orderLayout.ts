@@ -263,19 +263,19 @@ export class OrderLayout implements OnInit {
         this.movements = [];
         console.log(`Getting movements from ${this.startDate} to ${this.endDate}...`);
 
-        this.inventoryService.getMovements(this.startDate, this.endDate).subscribe({
-        next: (data) => {
-            // Data received is the JSON array (like the one you provided initially)
-            this.movements = data; 
-            console.log('Movements successfully retrieved movements:', this.movements);
-            // console.log('Movements successfully retrieved:', data);
-        },
-        error: (error) => {
-            // Handle errors 
-            this.errorMessage = 'Failed to load inventory movements.';
-            console.error('API Error:', error);
-        }
-        });
+        // this.inventoryService.getMovements(this.startDate, this.endDate).subscribe({
+        // next: (data) => {
+        //     // Data received is the JSON array (like the one you provided initially)
+        //     this.movements = data; 
+        //     console.log('Movements successfully retrieved movements:', this.movements);
+        //     // console.log('Movements successfully retrieved:', data);
+        // },
+        // error: (error) => {
+        //     // Handle errors 
+        //     this.errorMessage = 'Failed to load inventory movements.';
+        //     console.error('API Error:', error);
+        // }
+        // });
     }
     loadOrders():void{
          this.listOrders = [];

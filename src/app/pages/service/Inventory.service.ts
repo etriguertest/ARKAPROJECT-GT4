@@ -73,16 +73,16 @@ export class InventoryService {
    * @param endDate The end date for the range (e.g., '2026-07-20').
    * @returns An Observable that resolves to an array of InventoryMovement objects.
    */
-  public getMovements(startDate: string, endDate: string): Observable<InventoryMovementDto[]> {
+  public getMovements(params:HttpParams): Observable<InventoryMovementDto[]> {
     // 1. Set up the query parameters
-    let params = new HttpParams()
-      .set('start', startDate)
-      .set('end', endDate);
+    // let params = new HttpParams()
+    //   .set('start', startDate)
+    //   .set('end', endDate);
 
     // 2. Perform the GET request
     // The resulting URL will be: 
     // {{baseUrl}}?start=startDate&end=endDate
-    return this.http.get<InventoryMovementDto[]>(this.baseUrl+"api/v1/inventory-movements/range", { params: params });
+    return this.http.get<InventoryMovementDto[]>(this.baseUrl+"api/v1/inventory-movements/search", { params: params });
   }
 
   /**

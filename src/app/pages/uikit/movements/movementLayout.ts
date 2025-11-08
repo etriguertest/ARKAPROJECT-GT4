@@ -24,6 +24,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InventoryDto, InventoryMovementDto, InventoryService } from '@/pages/service/Inventory.service';
 import { ConfigService } from '@/pages/service/config.service';
+import { HttpParams } from '@angular/common/http';
 interface expandedRows {
     [key: string]: boolean;
 }
@@ -84,15 +85,16 @@ export class MovementLayout implements OnInit {
     //Fields Monitor Form
     lstMovements: InventoryMovementDto [] = [];
     monitorDropdownEstadoValues = [
+        { name: 'AJUSTE_INVENTARIO', code: 'AJUSTE_INVENTARIO' },
         { name: 'ENTRADA POR COMPRA', code: 'ENTRADA_POR_COMPRA' },
         { name: 'VENTA DESPACHO CLIENTE', code: 'VENTA_DESPACHO_CLIENTE' }
     ];
     monitorDropdownEstadoModel: any = null;
     
-    monitorFormDocReference: String | null = null;
-    monitorFormIdInventory: String | null = null;
-    monitorFormIdBranch: String | null = null;
-    monitorFormEstado: String | null = null;
+    monitorFormDocReference: string | null = null;
+    monitorFormIdInventory:  string | null = null;
+    monitorFormIdBranch: string | null = null;
+    monitorFormEstado: string | null = null;
     monitorFormFechaInicio: string | null = null;
     monitorFormFechaFinal: string | null = null;
     
@@ -215,10 +217,23 @@ export class MovementLayout implements OnInit {
         if (this.monitorFormFechaFinal) {
             this.endDate=this.getFormattedDate(this.monitorFormFechaFinal);
         }
+        let estado: string;
+        estado="";
+        if (this.monitorDropdownEstadoModel != null) {
+            estado = this.monitorDropdownEstadoModel.name; 
+            console.log("if (this.monitorDropdownEstadoModel != null)")
+        }
+        let params = new HttpParams()
+        .set('startDate', this.startDate.toString())
+        .set('endDate', this.endDate.toString())
+        .set('inventoryUnitId',  this.monitorFormIdInventory ? this.monitorFormIdInventory : "")
+        .set('documentReference',  this.monitorFormDocReference ? this.monitorFormDocReference : "")
+        .set('fromBranch',  this.monitorFormIdBranch ? this.monitorFormIdBranch : "")
+        .set('movementType', estado.toString())
         this.lstMovements = [];
         console.log(`Getting movements from ${this.startDate} to ${this.endDate}...`);
 
-        this.inventoryService.getMovements(this.startDate, this.endDate).subscribe({
+        this.inventoryService.getMovements(params).subscribe({
         next: (data:InventoryMovementDto[]) => {
             // Data received is the JSON array (like the one you provided initially)
             this.lstMovements = data; 
