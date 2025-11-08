@@ -44,4 +44,12 @@ public interface InventoryMovementService {
      * @return A Flux emitting the last 10 matching transactions.
      */
     Flux<InventoryTransaction> findLastTenMovementsByInventoryUnitId(Long inventoryUnitId);
+
+    Flux<InventoryTransaction> findByFilters(
+            Long inventoryUnitId,
+            String movementType,
+            LocalDate startDate,
+            LocalDate endDate,
+            String documentReference,
+            Long fromBranch);
 }

@@ -80,4 +80,23 @@ public class InventoryTransactionController {
             @PathVariable("inventoryUnitId") Long inventoryUnitId) {
         return service.findLastTenMovementsByInventoryUnitId(inventoryUnitId);
     }
+
+    @GetMapping("/search")
+    public Flux<InventoryTransaction> findByFilters(
+            @RequestParam(value = "inventoryUnitId", required = false) Long inventoryUnitId,
+            @RequestParam(value = "movementType", required = false) String movementType,
+            @RequestParam(value = "start", required = false) LocalDate startDate,
+            @RequestParam(value = "end", required = false) LocalDate endDate,
+            @RequestParam(value = "documentReference", required = false) String documentReference,
+            @RequestParam(value = "fromBranch", required = false) Long fromBranch) {
+
+        return service.findByFilters(
+                inventoryUnitId,
+                movementType,
+                startDate,
+                endDate,
+                documentReference,
+                fromBranch
+        );
+    }
 }
