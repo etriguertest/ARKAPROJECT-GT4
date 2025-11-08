@@ -19,6 +19,7 @@ import { InventoryLayout } from './inventory/inventoryLayout';
 import { ProductLayout } from './product/productLayout';
 import { MovementLayout } from './movements/movementLayout';
 import { PedidoLayout } from './pedido/pedidoLayout';
+import { VentaLayout } from './sales/ventaLayout';
 
 export default [
     { path: 'product', data: { breadcrumb: 'auth' }, component: ProductLayout },
@@ -26,6 +27,7 @@ export default [
     { path: 'pedido', data: { breadcrumb: 'auth' }, component: PedidoLayout },
     { path: 'inventory', data: { breadcrumb: 'auth' }, component: InventoryLayout }, 
     { path: 'movements', data: { breadcrumb: 'auth' }, component:  MovementLayout }, 
+    { path: 'sales', data: { breadcrumb: 'auth' }, component:  VentaLayout }, 
     { path: 'button', data: { breadcrumb: 'Button' }, component: ButtonDemo },
     { path: 'charts', data: { breadcrumb: 'Charts' }, component: ChartDemo },
     { path: 'file', data: { breadcrumb: 'File' }, component: FileDemo },

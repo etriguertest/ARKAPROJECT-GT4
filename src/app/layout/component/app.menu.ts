@@ -35,6 +35,7 @@ export class AppMenu {
                     { label: 'Pedidos', icon: 'pi pi-fw pi-truck', routerLink: ['/uikit/pedido'] },
                     { label: 'Inventario', icon: 'pi pi-fw pi-box', routerLink: ['/uikit/inventory'] },
                     { label: 'Movimientos Inventario', icon: 'pi pi-fw pi-history', routerLink: ['/uikit/movements'] },
+                    { label: 'Ventas', icon: 'pi pi-fw pi-receipt', routerLink: ['/uikit/sales'] },
                     // { label: 'Locaciones', icon: 'pi pi-fw pi-building', routerLink: ['/uikit/inventory'] },
                     // { label: 'Carrito de Compras', icon: 'pi pi-fw pi-shopping-cart', routerLink: ['/uikit/inventory'] },
                     // { label: 'Ventas', icon: 'pi pi-fw pi-receipt', routerLink: ['/uikit/inventory'] },
