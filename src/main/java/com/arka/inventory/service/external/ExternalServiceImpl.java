@@ -40,7 +40,7 @@ public class ExternalServiceImpl implements ExternalService{
         System.out.println("fetchProductDetails(Long productId)"+configs.getProductBaseUrl());
         // 2. Define the asynchronous operation
         return webClient.get()
-                .uri("api/products/{productId}", productId) // Use a clearer path
+                .uri("/api/products/{productId}", productId) // Use a clearer path
                 .retrieve()
                 .bodyToMono(ProductDto.class)
                 .doOnError(e -> System.out.println("Status Error: " + e.getMessage())) // ADD THIS LINE
