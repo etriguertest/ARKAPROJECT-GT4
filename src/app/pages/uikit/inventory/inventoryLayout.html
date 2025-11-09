@@ -191,6 +191,7 @@
                                 </th> -->
                                 <!-- <th style="min-width:200px;" pFrozenColumn class="font-bold bg">Id</th> -->
                                 <!-- <th style="min-width:100px">Id</th> -->
+                                <th style="min-width:200px">Id Producto</th>
                                 <th style="min-width:200px">Producto</th>
                                 <th style="min-width:200px">Fecha Recibido</th>
                                 <!-- <th style="min-width:200px">manufactureDate</th> -->
@@ -209,6 +210,7 @@
                                 </td> -->
                                 <!-- <td pFrozenColumn class="font-bold">{{ lstInventory.id }}</td> -->
                                 <td style="min-width:100px">{{ lstInventory.productId }}</td>
+                                <td style="min-width:100px">{{ lstInventory.productName }}</td>
                                 <td>{{ lstInventory.dateReceived }}</td>
                                 <!-- <td>{{ lstInventory.manufactureDate }}</td> -->
                                 <td> <p-tag [value]="lstInventory!.status" [severity]="getStockSeverity(lstInventory!.status)" /></td>

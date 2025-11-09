@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 export interface InventoryMovementDto {
   id: number| null;
   inventoryUnitId: number;
+  productName: string;
   movementType: string;
   movementDate: string;
   documentReference: string;
