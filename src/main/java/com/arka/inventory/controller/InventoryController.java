@@ -82,7 +82,7 @@ public class InventoryController {
     }
 
     @PostMapping("/search-by-filters")
-    public Flux<InventoryDto> getByFilters(@RequestBody FilterInventoryRequestDto filters) {
+    public Flux<InventoryDtoResp> getByFilters(@RequestBody FilterInventoryRequestDto filters) {
         return inventoryServiceImpl.findByFilters(filters);
     }
 

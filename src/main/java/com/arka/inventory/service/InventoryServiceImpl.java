@@ -148,7 +148,7 @@ public class InventoryServiceImpl implements InventoryService{
         return inventoryRepository.findByDateReceivedBetween(startDate, endDate);
     }
 
-    public Flux<InventoryDto> findByFilters(FilterInventoryRequestDto filters) {
+    public Flux<InventoryDtoResp> findByFilters(FilterInventoryRequestDto filters) {
         Flux<Inventory> inventoryFlux;
 
         if (!StringUtils.isNotBlank(filters.getStatus()) && filters.getBranchId()==null ){
@@ -171,31 +171,33 @@ public class InventoryServiceImpl implements InventoryService{
                     filters.getBranchId()
             );//.skip(2).take(10);
         }
-        return addBranchToInventoryDto(inventoryFlux);
+        return addBranchAndProductToInventoryDto(inventoryFlux);
     }
 
-//    public Mono<InventoryDto> getInventoryDetails(Long id) {
-//        return inventoryRepository.findById(id)
-//                .flatMap(inventory -> {
-//                    Mono<Branch> branchMono = branchRepository.findById(inventory.getBranchId());
-//                    Mono<Supplier> supplierMono = supplierRepository.findById(inventory.getSupplierId());
-//
-//                    return Mono.zip(branchMono, supplierMono)
-//                            .map(tuple -> {
-//                                Branch branch = tuple.getT1();
-//                                Supplier supplier = tuple.getT2();
-//                                InventoryDto dto = InventoryDto.fromEntity(inventory);
-//                                if (branch != null) {
-//                                    dto.setBranchName(branch.getBranchName());
-//                                }
-//                                if (supplier != null) {
-//                                    dto.setSupplierName(supplier.getName());
-//                                }
-//                                return dto;
-//                            })
-//                            .defaultIfEmpty(InventoryDto.fromEntity(inventory));
-//                });
-//    }
+private Flux<InventoryDtoResp> addBranchAndProductToInventoryDto(Flux<Inventory> inventoryFlux) {
+    return inventoryFlux.flatMap(inventory -> {
+        // 1. Get the Mono<Branch> for the current inventory item
+        Mono<Branch> branchMono = branchRepository.findById(inventory.getBranchId());
+        // 2. Get the Mono<ProductDto> for the current inventory item
+        Mono<ProductDto> productMono = externalServices.fetchProductDetails(inventory.getProductId());
+        // --- Combine the two Monos using zipWith ---
+        // Zip the two results together (Branch and Product)
+        return branchMono
+                .zipWith(productMono)
+                // The result is a Tuple2<Branch, ProductDto>
+                .map(tuple -> {
+                    // This executes when BOTH the branch and the product are available
+                    Branch branch = tuple.getT1();
+                    ProductDto product = tuple.getT2();
+
+                    InventoryDtoResp inventoryDto = InventoryDtoResp.fromEntity(inventory);
+                    inventoryDto.setBranchName(branch.getBranchName());
+                    inventoryDto.setProductName(product.getName());
+                    return inventoryDto;
+                })
+                .defaultIfEmpty(InventoryDtoResp.fromEntity(inventory));
+    });
+}
 
     private Flux<InventoryDto> addBranchToInventoryDto(Flux<Inventory> inventoryFlux) {
         return inventoryFlux.flatMap(inventory -> {
@@ -217,7 +219,7 @@ public class InventoryServiceImpl implements InventoryService{
                     .map(branch -> {
                         InventoryDto inventoryDto = InventoryDto.fromEntity(inventory);
                         inventoryDto.setBranchName(branch.getBranchName());
-                        System.out.println("branchname" + branch.getBranchName());
+//                        System.out.println("branchname" + branch.getBranchName());
                         return inventoryDto;
                     })
                     .defaultIfEmpty(InventoryDto.fromEntity(inventory));

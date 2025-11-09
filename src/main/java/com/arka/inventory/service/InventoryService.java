@@ -21,6 +21,6 @@ public interface InventoryService {
     Mono<InventoryDtoResp> findByIdCustom(Long id);
     Flux<Inventory> findAll();
     Flux<Inventory> findInventoryByDateReceivedBetween(LocalDate startDate, LocalDate endDate);
-    Flux<InventoryDto> findByFilters(FilterInventoryRequestDto filters);
+    Flux<InventoryDtoResp> findByFilters(FilterInventoryRequestDto filters);
     Mono<InventoryUpdateItemResponse> updateQuantities(List<InventoryUpdateItemRequest> updateItems);
 }

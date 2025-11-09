@@ -135,8 +135,8 @@ public class InventoryMovementServiceImpl implements InventoryMovementService{
         String result = monoString.block();
         Mono<String> monoStringQueue = sqsTransformer.listQueueToProductToString(lstInventoryQueueToProduc);
         String resultQueue = monoStringQueue.block();
-        System.out.println("result");
-        System.out.println("resultQueue");
+//        System.out.println("result");
+//        System.out.println("resultQueue");
 //        messageProducerService.send(result);
         messageProducerService.sendToProducts(resultQueue);
         snsPublisherService.publishNotification("MOVIMIENTO-INVENTARIO",result);
