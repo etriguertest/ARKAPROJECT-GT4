@@ -51,6 +51,13 @@ export interface WarehouseBranch {
   warehouseType: string;
   active: boolean;
 }
+export interface InventoryItemUpdateQuantities {
+    numOrder: number;
+    type: 0 | 1 | 2; 
+    productId: number;
+    quantity: number;
+}
+
 // Define the expected dropdown item structure
 export interface DropdownItem {
     id: string | number; // Use the correct type for your ID

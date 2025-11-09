@@ -70,4 +70,10 @@ export class SalesService {
     return this.http.get<SaleItem[]>(this.baseUrl+'api/sales/detail/'+idVenta);
   }
 
+    public confirmSale(orderId:string): Observable<string> {
+        // return this.http.post<string>(this.baseUrl+'api/sales/confirm/'+orderId);
+        return this.http.post<string>(this.baseUrl + 'api/sales/confirm/' + orderId, null);
+    }
+  
+
 }

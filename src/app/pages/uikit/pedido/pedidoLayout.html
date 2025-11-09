@@ -27,6 +27,11 @@
                                 <!-- <p-button label="Siguiente" icon="pi pi-angle-right"  iconPos="right" severity="secondary" size="small"  text (click)="actionFordward()"/> -->
                                 <p-button label="Limpiar" icon="pi pi-trash" severity="secondary"  size="small" text="true" 
                                 (click)="clearGeneralFormValues()" />
+                                <p-button label="Confirmar Pedido" icon="pi pi-trash" severity="primary"  size="small" text="true" 
+                                (click)="confirmacionPedido()"  
+                                    [disabled]="generalFormOrderId === 'PENDIENTE' ? false : true" />
+                                <p-button label="Enviar Notificacion cliente" icon="pi pi-trash" severity="primary"  size="small" text="true" 
+                                />
                     </ng-template>
 
                     <ng-template #end>

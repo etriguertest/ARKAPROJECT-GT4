@@ -24,6 +24,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { DatePickerModule } from 'primeng/datepicker';
 import { Pedido, PedidoDetalle, PedidoMessage, PedidoService } from '@/pages/service/pedido.service';
 import { ConfigService } from '@/pages/service/config.service';
+import { SalesService } from '@/pages/service/sales.service';
 interface expandedRows {
     [key: string]: boolean;
 }
@@ -76,6 +77,7 @@ export class PedidoLayout implements OnInit {
     ) {}
 
     private pedidoService = inject(PedidoService);
+    private saleService = inject(SalesService);
     apiUrl: string |  undefined;
     activeTabIndex: number = 1;
     isGeneralVisible: boolean = false; 
@@ -113,6 +115,9 @@ export class PedidoLayout implements OnInit {
                     this.apiUrl = this.configService.get('BASE_URL_ORDERS'); 
                     console.log('Successfully loaded config. The API URL is:', this.apiUrl);
                     this.pedidoService.baseUrl=this.apiUrl ? this.apiUrl:"";
+                    this.apiUrl = this.configService.get('BASE_URL_SELLING'); 
+                    console.log('Successfully loaded config. The API URL is:', this.apiUrl);
+                    this.saleService.baseUrl=this.apiUrl ? this.apiUrl:"";
         
                 })
                 .catch((error) => {
@@ -141,6 +146,32 @@ export class PedidoLayout implements OnInit {
     }
 
     clearGeneralFormValues():void{
+    }
+
+    confirmacionPedido():void{
+        console.log("Confirmacion de Pedido -> ",this.generalFormOrderId);
+         this.saleService.confirmSale(this.generalFormOrderId!).subscribe({
+                next: (data:string) => {
+                    console.log('List Pedido successfully retrieved:',  JSON.stringify(data, null, 2));
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Successful',
+                        detail: 'Confirmacion de Pedido Exitosa',
+                        life: 3000
+                    });
+                },
+                error: (error) => {
+                    // Handle errors 
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Successful',
+                        detail: 'Ocurrio un problema confirmando el pedido',
+                        life: 3000
+                    });
+                    console.error('API Error:', error);
+                }
+                });
+
     }
 
     loadListPedidos(): void {
