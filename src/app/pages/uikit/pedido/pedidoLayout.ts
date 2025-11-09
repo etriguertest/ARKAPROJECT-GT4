@@ -146,6 +146,16 @@ export class PedidoLayout implements OnInit {
     }
 
     clearGeneralFormValues():void{
+        this.generalFormOrderId = ""; 
+        this.generalFormCustomer = "";
+        this.generalFormStatus= "";
+        this.generalFormOrderDate= "";
+        this.generalFormConfirmationDate= "";
+
+        this.generalFormTotalAmount = null;
+        this.generalFormImpuesto = null;
+        this.generalFormSubtotal = null;
+        this.lstPedidoDetalle =[];
     }
 
     confirmacionPedido():void{
@@ -171,7 +181,7 @@ export class PedidoLayout implements OnInit {
                     console.error('API Error:', error);
                 }
                 });
-
+            this.clearGeneralFormValues();
     }
 
     loadListPedidos(): void {

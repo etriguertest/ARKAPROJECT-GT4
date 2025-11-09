@@ -29,7 +29,7 @@
                                 (click)="clearGeneralFormValues()" />
                                 <p-button label="Confirmar Pedido" icon="pi pi-trash" severity="primary"  size="small" text="true" 
                                 (click)="confirmacionPedido()"  
-                                    [disabled]="generalFormOrderId === 'PENDIENTE' ? false : true" />
+                                    [disabled]="generalFormStatus === 'PENDIENTE' ? false : true" />
                                 <!-- <p-button label="Enviar Notificacion cliente" icon="pi pi-trash" severity="primary"  size="small" text="true" 
                                 /> -->
                     </ng-template>
@@ -168,7 +168,7 @@
                 <p-toolbar styleClass="mb-1 flex" style="margin: 5px;">
                     <ng-template #start>
                                 <p-button label="Buscar" icon="pi pi-search" severity="primary"  size="small"  text (click)="loadListPedidos()"/>
-                                <p-button label="Limpiar" icon="pi pi-trash" severity="secondary"  size="small" text (click)="clearMonitorFormValues()"/>
+                                <!-- <p-button label="Limpiar" icon="pi pi-trash" severity="secondary"  size="small" text (click)="clearMonitorFormValues()"/> -->
                     </ng-template>
                     <ng-template #end>
                         <p-button label="Export" icon="pi pi-upload" severity="secondary" size="small"/>
