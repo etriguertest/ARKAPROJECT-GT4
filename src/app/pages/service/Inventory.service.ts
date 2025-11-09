@@ -52,7 +52,7 @@ export interface WarehouseBranch {
   active: boolean;
 }
 export interface InventoryItemUpdateQuantities {
-    numOrder: number;
+    numOrder: number | null;
     type: 0 | 1 | 2; 
     productId: number;
     quantity: number;
@@ -139,5 +139,10 @@ export class InventoryService {
     return this.http.get<WarehouseBranch[]>(this.baseUrl+"api/v1/branch");
   }
 
+  public adjustStockInventory(adijustStockQuantities: InventoryItemUpdateQuantities[]): Observable<string> {
+   
+    return this.http.post<string>(this.baseUrl+"api/v1/inventory/update-quantities", adijustStockQuantities);
+  
+  }
 
 }

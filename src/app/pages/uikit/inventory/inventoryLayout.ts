@@ -22,7 +22,7 @@ import { TabsModule } from 'primeng/tabs';
 import { ButtonGroupModule } from 'primeng/buttongroup';
 import { ToolbarModule } from 'primeng/toolbar';
 import { DatePickerModule } from 'primeng/datepicker';
-import { InventoryDto, InventoryMovementDto, InventoryService, WarehouseBranch } from '@/pages/service/Inventory.service';
+import { InventoryDto, InventoryItemUpdateQuantities, InventoryMovementDto, InventoryService, WarehouseBranch } from '@/pages/service/Inventory.service';
 import { ConfigService } from '@/pages/service/config.service';
 interface expandedRows {
     [key: string]: boolean;
@@ -104,7 +104,8 @@ export class InventoryLayout implements OnInit {
     monitorFormFechaFinal: string | null = null;
     
     selectedInventory: InventoryDto | null = null;// Initialize it to 1 since your HTML starts with [value]="1" (Monitor)
-    
+    lstInventoryItemUpdateQuantities: InventoryItemUpdateQuantities[] = [];
+
     // Fields General Form 
     generalFormProducto: string | null = null;
     generalFormSucursal: string | null = null;
@@ -183,17 +184,41 @@ export class InventoryLayout implements OnInit {
         console.log("ANTES ---> DESPUES-->",antes," ",item);
         // Get the new value from the input field
         const newQuantity = event.target.value ? parseInt(event.target.value, 10) : 0;
-        console.log("MSAJEONOJISN");
 
-            this.messageService.add({
-                severity: 'success',
-                summary: 'Successful',
-                detail: 'Lista de Invetorio Cargado',
-                life: 3000
-            });
         // Update the quantity property of the specific item in your array
         // It's generally safer to update a copy or ensure change detection runs.
         this.lstInventory[index].quantity = newQuantity;
+        this.lstInventoryItemUpdateQuantities = [];
+        this.lstInventoryItemUpdateQuantities.push({
+            numOrder:null,
+            type:2,
+            productId:this.lstInventory[index].productId,
+            quantity:this.lstInventory[index].quantity,
+            
+        });
+        console.log('List Inventory about to send:',  JSON.stringify(this.lstInventoryItemUpdateQuantities, null, 2));
+        this.inventoryService.adjustStockInventory(this.lstInventoryItemUpdateQuantities).subscribe({
+        next: (data:string) => {
+            console.log('List Inventory successfully retrieved:',  JSON.stringify(data, null, 2));
+            this.messageService.add({
+                severity: 'success',
+                summary: 'Successful',
+                detail: 'Ajuste de Inventario exitoso',
+                life: 3000
+            });
+            // console.log('Movements successfully retrieved:', data);
+        },
+        error: (error) => {
+            // Handle errors 
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Successful',
+                detail: 'Ocurrio un problema ajustando Inventario',
+                life: 3000
+            });
+            console.error('API Error:', error);
+        }
+        });
         
         // If you are using OnPush change detection, you might need an extra step
         // to force detection, like spreading the array:
