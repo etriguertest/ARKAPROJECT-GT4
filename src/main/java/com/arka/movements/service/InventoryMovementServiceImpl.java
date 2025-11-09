@@ -156,6 +156,7 @@ public class InventoryMovementServiceImpl implements InventoryMovementService{
                     transaction.setQuantity(row.get("quantity", Integer.class)); // Example field
                     transaction.setDocumentReference(row.get("document_reference", String.class));
                     transaction.setFromBranch(row.get("from_branch", Long.class));
+                    transaction.setQuantityType(row.get("quantity_type", String.class));
                     return transaction;
                 })
                 .all();
