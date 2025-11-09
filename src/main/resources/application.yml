@@ -25,7 +25,7 @@ server:
 # ===============================================~
 external:
   api:
-    product-url: "https://avm02saaxg.execute-api.us-east-2.amazonaws.com/v1/api/products" # The base URL for the Product API
+    product-url: "https://avm02saaxg.execute-api.us-east-2.amazonaws.com/v1/api/product" # The base URL for the Product API
     timeout-ms: 3000
 
 
