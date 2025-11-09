@@ -18,6 +18,7 @@ import reactor.util.retry.Retry;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -145,8 +146,8 @@ public class SalesService {
     public Flux<Sale> findSalesByFilters(Long orderId,
                                          Long customerId,
                                          String customerName,
-                                         OffsetDateTime fromDate,
-                                         OffsetDateTime toDate) {
+                                         LocalDate fromDate,
+                                         LocalDate toDate) {
 
         StringBuilder sql = new StringBuilder("SELECT * FROM sales WHERE 1=1 ");
 
@@ -160,10 +161,10 @@ public class SalesService {
             sql.append("AND LOWER(customer_name) LIKE LOWER(:customerName) ");
         }
         if (fromDate != null) {
-            sql.append("AND created_at >= :fromDate ");
+            sql.append("AND cast(created_at as DATE) >= :fromDate ");
         }
         if (toDate != null) {
-            sql.append("AND created_at <= :toDate ");
+            sql.append("AND cast(created_at as DATE) <= :toDate ");
         }
 
         sql.append("ORDER BY created_at DESC");
@@ -217,5 +218,56 @@ public class SalesService {
                                 .collectList()
                 )
                 .doOnError(ex -> log.error("Error obteniendo detalle de venta {}: {}", saleId, ex.getMessage()));
+    }
+
+
+    public Mono<SalesSummaryDto> getSalesSummary() {
+        Mono<BigDecimal> totalSalesMono = databaseClient.sql("SELECT COALESCE(SUM(total), 0) AS total_sales FROM sales")
+                .map(row -> row.get("total_sales", BigDecimal.class))
+                .one();
+
+        Flux<TopProductDto> topProductsFlux = databaseClient.sql("""
+            SELECT si.product_id, si.product_name, SUM(si.quantity) AS total_quantity
+            FROM sale_items si
+            GROUP BY si.product_id, si.product_name
+            ORDER BY total_quantity DESC
+            LIMIT 3
+            """)
+                .map(row -> {
+                    TopProductDto dto = new TopProductDto();
+                    dto.setProductId(row.get("product_id", Long.class));
+                    dto.setProductName(row.get("product_name", String.class));
+                    dto.setTotalQuantity(row.get("total_quantity", Long.class));
+                    return dto;
+                })
+                .all();
+
+        Flux<TopCustomerDto> topCustomersFlux = databaseClient.sql("""
+            SELECT s.customer_id, s.customer_name, COUNT(*) AS total_purchases
+            FROM sales s
+            GROUP BY s.customer_id, s.customer_name
+            ORDER BY total_purchases DESC
+            LIMIT 3
+            """)
+                .map(row -> {
+                    TopCustomerDto dto = new TopCustomerDto();
+                    dto.setCustomerId(row.get("customer_id", Long.class));
+                    dto.setCustomerName(row.get("customer_name", String.class));
+                    dto.setTotalPurchases(row.get("total_purchases", Long.class));
+                    return dto;
+                })
+                .all();
+
+        return Mono.zip(
+                totalSalesMono,
+                topProductsFlux.collectList(),
+                topCustomersFlux.collectList()
+        ).map(tuple -> {
+            SalesSummaryDto summary = new SalesSummaryDto();
+            summary.setTotalSales(tuple.getT1());
+            summary.setTopProducts(tuple.getT2());
+            summary.setTopCustomers(tuple.getT3());
+            return summary;
+        }).doOnError(ex -> log.error("Error generando resumen de ventas: {}", ex.getMessage()));
     }
 }
