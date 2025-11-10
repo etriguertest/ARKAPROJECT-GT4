@@ -3,6 +3,7 @@ package com.arka.order.Service;
 import com.arka.order.Dto.*;
 import com.arka.order.Dto.Response.ApiResponseCreateOrder;
 import com.arka.order.Dto.Response.ApiResponseListOrdersByStatus;
+import com.arka.order.Dto.Response.ChangeStatusResponse;
 import com.arka.order.Entity.Order;
 import com.arka.order.Entity.OrderItem;
 import com.arka.order.Entity.OrderStockReservation;
@@ -31,14 +32,17 @@ public class OrderServiceImpl implements IOrderService{
     private final WebClient webClient;
     private final OrderItemRepository orderItemRepository;
     private final OrderStockReservationRepository orderStockReservation;
+    private final MessageProducerService messageProducerService;
 
     public OrderServiceImpl (OrderRepository orderRepository,
                              OrderStockReservationRepository orderStockReservation,
-                             OrderItemRepository orderItemRepository){
+                             OrderItemRepository orderItemRepository,
+                             MessageProducerService messageProducerService){
         this.orderRepository = orderRepository;
         this.webClient = WebClient.create("https://64474k7pgh.execute-api.us-east-2.amazonaws.com/dev/inventory");
         this.orderStockReservation = orderStockReservation;
         this.orderItemRepository = orderItemRepository;
+        this.messageProducerService = messageProducerService;
     }
 
     @Transactional
@@ -417,6 +421,8 @@ public class OrderServiceImpl implements IOrderService{
                 .orders(responseList)
                 .build();
     }
+
+
 
     private OrderResponse mapToResponseDTO(Order order) {
         OrderResponse dto = new OrderResponse();

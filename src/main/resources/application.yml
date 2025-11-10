@@ -1,4 +1,13 @@
 spring:
+  application:
+    name: order
+  cloud:
+    aws:
+      region:
+        static: us-east-1
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
   datasource:
     url: ${DB_URL_JDBC}
     username: ${DB_USER}
@@ -7,3 +16,4 @@ spring:
   sql:   
     init:
       mode: always
+
