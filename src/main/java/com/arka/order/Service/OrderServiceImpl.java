@@ -3,7 +3,7 @@ package com.arka.order.Service;
 import com.arka.order.Dto.*;
 import com.arka.order.Dto.Response.ApiResponseCreateOrder;
 import com.arka.order.Dto.Response.ApiResponseListOrdersByStatus;
-import com.arka.order.Dto.Response.ChangeStatusResponse;
+import com.arka.order.Dto.Response.ResponseProduct;
 import com.arka.order.Entity.Order;
 import com.arka.order.Entity.OrderItem;
 import com.arka.order.Entity.OrderStockReservation;
@@ -14,13 +14,13 @@ import com.arka.order.Utils.Errors.BusinessException;
 import com.arka.order.Utils.OrderStatus;
 import com.arka.order.Utils.ReservationStatus;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements IOrderService{
     private final OrderRepository orderRepository;
     private final WebClient webClient;
+    private final WebClient productClient;
     private final OrderItemRepository orderItemRepository;
     private final OrderStockReservationRepository orderStockReservation;
     private final MessageProducerService messageProducerService;
@@ -43,6 +44,7 @@ public class OrderServiceImpl implements IOrderService{
         this.orderStockReservation = orderStockReservation;
         this.orderItemRepository = orderItemRepository;
         this.messageProducerService = messageProducerService;
+        this.productClient = WebClient.create("https://64474k7pgh.execute-api.us-east-2.amazonaws.com/dev/product/api/products/");
     }
 
     @Transactional
@@ -120,8 +122,13 @@ public class OrderServiceImpl implements IOrderService{
                 OrderItem item = new OrderItem();
                 item.setProductId(itemDto.getProductId());
                 item.setQuantity(itemDto.getQuantity());
-                item.setPrice(itemDto.getPrice());
-                item.setSubtotal(itemDto.getPrice().multiply(BigDecimal.valueOf(itemDto.getQuantity())));
+                ResponseProduct responseProduct = getProductInfo(itemDto.getProductId());
+                if (responseProduct != null) {
+                    item.setPrice(responseProduct.getPrice());
+                }else{
+                    item.setPrice(itemDto.getPrice());
+                }
+                item.setSubtotal(responseProduct.getPrice().multiply(BigDecimal.valueOf(itemDto.getQuantity())));
                 item.setOrder(order);
                 return item;
             }).collect(Collectors.toList());
@@ -438,10 +445,28 @@ public class OrderServiceImpl implements IOrderService{
             i.setProductId(item.getProductId());
             i.setQuantity(item.getQuantity());
             i.setPrice(item.getPrice());
+            ResponseProduct product = getProductInfo(item.getProductId());
+            if (product != null) {
+                i.setProductName(product.getName());
+            }
             return i;
         }).collect(Collectors.toList());
 
         dto.setItems(itemsDTO);
         return dto;
+    }
+
+    public ResponseProduct getProductInfo(Long productId){
+        try{
+            return productClient.get()
+                    .uri("{id}",productId)
+                    .retrieve()
+                    .bodyToMono(ResponseProduct.class)
+                    .timeout(Duration.ofSeconds(15))
+                    .block();
+        }catch (Exception e){
+            System.out.println("Error al obtener información del producto: "+e.getMessage());
+            return null;
+        }
     }
 }

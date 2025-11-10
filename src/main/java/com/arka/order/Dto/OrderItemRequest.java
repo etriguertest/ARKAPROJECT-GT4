@@ -11,6 +11,7 @@ public class OrderItemRequest {
     private Long productId;
     private Integer quantity;
     private BigDecimal price;
+    private String productName;
 
     public Long getProductId() {
         return productId;
@@ -34,5 +35,12 @@ public class OrderItemRequest {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 }
