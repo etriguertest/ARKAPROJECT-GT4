@@ -8,13 +8,17 @@ import { TopProductWidget } from './arkacomponents/topProductWidget';
 import { TopCustomerWidget } from './arkacomponents/topCustomerWidget';
 import { ConfigService } from '../service/config.service';
 import { DashboardData, SalesService } from '../service/sales.service';
+import { PedidoService } from '../service/pedido.service';
 
 @Component({
     selector: 'app-dashboard',
     imports: [StatsWidget,TopProductWidget,TopCustomerWidget],//, RecentSalesWidget, BestSellingWidget, RevenueStreamWidget, NotificationsWidget],
     template: `
         <div class="grid grid-cols-12 gap-8">
-            <app-stats-widget [vartotalSales]=vartotalSales class="contents" />
+            <app-stats-widget [vartotalSales]=vartotalSales 
+            [vartotalCarritosAbandonados]=vartotalCarritosAbandonados
+            [vartotalOrdenes]=vartotalOrdenes
+            class="contents" />
             <div class="col-span-12 xl:col-span-6">
 
                 <app-top-customer-widget [topCustomers]="topCustomers" />
@@ -32,14 +36,17 @@ import { DashboardData, SalesService } from '../service/sales.service';
 export class Dashboard implements OnInit {
     constructor(
         private configService: ConfigService,
-        private salesService: SalesService 
+        private salesService: SalesService ,
+        private pedidoService: PedidoService 
     ) {}
     apiUrl: string |  undefined;
 
     vartotalSales = 1705.48;
+    vartotalCarritosAbandonados : any = null;
+    vartotalOrdenes : any = null;
 
     topProducts : any[]=[];
-    topCustomers: any[]=[];
+    topCustomers: any[]=[]; 
     ngOnInit() {
         this.topProducts = [];
         this.topCustomers = [];
@@ -48,6 +55,9 @@ export class Dashboard implements OnInit {
                 this.apiUrl = this.configService.get('BASE_URL_SELLING'); 
                 console.log('Successfully loaded config. The API URL is:', this.apiUrl);
                 this.salesService.baseUrl=this.apiUrl ? this.apiUrl:"";
+                this.apiUrl = this.configService.get('BASE_URL_ORDERS'); 
+                console.log('Successfully loaded config. The API URL is:', this.apiUrl);
+                this.pedidoService.baseUrl=this.apiUrl ? this.apiUrl:"";
         
              })
              .catch((error) => {
@@ -67,6 +77,32 @@ export class Dashboard implements OnInit {
                 console.error('API Error:', error);
             }
         });
+
+        this.pedidoService.GetTotalNumOrders().subscribe({
+            next: (data:any) => {
+                // this.lstPedidos = data.orders; 
+                console.log('GetTotalNumOrders successfully retrieved:',  JSON.stringify(data, null, 2));
+                this.vartotalOrdenes=data;
+            },
+            error: (error) => {
+                // Handle errors 
+                console.error('API Error:', error);
+            }
+        });
+        this.pedidoService.GetTotalAbandonCar().subscribe({
+            next: (data:any) => {
+                // this.lstPedidos = data.orders; 
+                console.log('GetTotalNumOrders successfully retrieved:',  JSON.stringify(data, null, 2));
+                 this.vartotalCarritosAbandonados =data;
+            },
+            error: (error) => {
+                // Handle errors 
+                console.error('API Error:', error);
+            }
+        });
+
+
+
     }
 
 }

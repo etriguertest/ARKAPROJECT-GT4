@@ -34,6 +34,15 @@ export class PedidoService {
     public GetOrderByStatus(status:string): Observable<PedidoMessage> {
         return this.http.get<PedidoMessage>(this.baseUrl+'api/order/order-status/'+status);
     }
+
+    public GetTotalNumOrders(): Observable<string> {
+        return this.http.get<any>(this.baseUrl+'api/order/notabandoned/count');
+    }
+  
+    public GetTotalAbandonCar(): Observable<string> {
+        return this.http.get<any>(this.baseUrl+'api/order/abandoned/count');
+    }
+  
   
 
 }

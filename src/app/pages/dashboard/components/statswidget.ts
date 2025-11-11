@@ -1,6 +1,14 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+export interface OrderStats {
+    ordersCountNotAbandoned: number;
+    // Add other properties if they exist
+}
 
+export interface AbandonedCartStats {
+    abandonedOrdersCount: number;
+    // Add other properties if they exist
+}
 @Component({
     standalone: true,
     selector: 'app-stats-widget',
@@ -10,7 +18,7 @@ import { CommonModule } from '@angular/common';
                 <div class="flex justify-between mb-4">
                     <div>
                         <span class="block text-muted-color font-medium mb-4">Ordenes</span>
-                        <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">---</div>
+                        <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">{{vartotalOrdenes?.ordersCountNotAbandoned}}</div>
                     </div>
                     <div class="flex items-center justify-center bg-blue-100 dark:bg-blue-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
                         <i class="pi pi-truck text-blue-500 text-xl!"></i>
@@ -57,7 +65,7 @@ import { CommonModule } from '@angular/common';
                 <div class="flex justify-between mb-4">
                     <div>
                         <span class="block text-muted-color font-medium mb-4">Carritos Abandonados</span>
-                        <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">---</div>
+                        <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">{{vartotalCarritosAbandonados?.abandonedOrdersCount}}</div>
                     </div>
                     <div class="flex items-center justify-center bg-purple-100 dark:bg-purple-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
                         <i class="pi pi-shopping-cart text-purple-500 text-xl!"></i>
@@ -71,4 +79,6 @@ import { CommonModule } from '@angular/common';
 })
 export class StatsWidget {
     @Input() vartotalSales:number = 0;
+    @Input() vartotalCarritosAbandonados: AbandonedCartStats | null = null; 
+    @Input() vartotalOrdenes: OrderStats | null = null;
 }
