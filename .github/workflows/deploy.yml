@@ -54,7 +54,7 @@ jobs:
             docker run -d \
               --name ${{ github.ref_name }}-container \
               -p 8085:8080 \
-              -e DB_URL="${{ secrets.DB_URL_JDBC }}" \
+              -e DB_URL_JDBC="${{ secrets.DB_URL_JDBC }}" \
               -e DB_USER="${{ secrets.DB_USER }}" \
               -e DB_PASS="${{ secrets.DB_PASS }}" \
               -e AWS_ACCESS_KEY="${{ secrets.AWS_ACCESS_KEY }}" \
