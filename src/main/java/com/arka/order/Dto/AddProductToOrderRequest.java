@@ -1,9 +1,14 @@
 package com.arka.order.Dto;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.List;
 
 public class AddProductToOrderRequest {
+
     private Long orderId;
+    @Valid
     private List<OrderItemRequest> items;
 
     public AddProductToOrderRequest() {

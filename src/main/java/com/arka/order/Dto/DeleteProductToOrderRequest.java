@@ -1,8 +1,11 @@
 package com.arka.order.Dto;
 
+import jakarta.validation.constraints.NotNull;
+
 import java.util.List;
 
 public class DeleteProductToOrderRequest {
+    @NotNull(message = "Debe existir por lo menos un producto para eliminarse")
     private List<Long> productId;
 
     public DeleteProductToOrderRequest() {

@@ -1,13 +1,18 @@
 package com.arka.order.Dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
 public class CreateOrderRequest {
+
+    @NotNull(message = "El campo customerId no puede ir vacío")
     private Long customerId;
+    @NotNull(message = "Debe incluir almenos un item de producto")
+    @Valid
     private List<OrderItemRequest> items;
 
     public Long getCustomerId() {

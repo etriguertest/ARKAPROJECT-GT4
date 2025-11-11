@@ -19,4 +19,7 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
             @Param("status") OrderStatus status,
             @Param("date") LocalDateTime date
     );
+
+    long countByStatus(OrderStatus status);
+    long countByStatusNot(OrderStatus status);
 }

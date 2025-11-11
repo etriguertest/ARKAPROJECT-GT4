@@ -2,6 +2,7 @@ package com.arka.order.Service;
 
 import com.arka.order.Dto.Response.ChangeStatusResponse;
 import com.arka.order.Dto.Response.CustomerResponse;
+import com.arka.order.Entity.Order;
 import com.arka.order.Repository.OrderItemRepository;
 import com.arka.order.Repository.OrderRepository;
 import com.arka.order.Repository.OrderStockReservationRepository;
@@ -122,5 +123,39 @@ public class ChangeOrderServiceImpl implements IChangeOrderService{
 
                     return Mono.just(response);
                 });
+    }
+
+
+    public void sendEmailToConfirm(Order order){
+        try{
+            CustomerResponse responseCustomer = webClient.get()
+                    .uri("{id}", order.getCustomerId())
+                    .retrieve()
+                    .bodyToMono(CustomerResponse.class)
+                    .timeout(Duration.ofSeconds(15))
+                    .onErrorResume(e -> Mono.empty())
+                    .block();
+
+            if (responseCustomer != null) {
+                String requestToQueue = String.format(
+                        "{\"emailCustomer\":\"%s\", \"userName\":\"%s\", \"orderId\":\"%s\", \"statusOrder\":\"%s\"}",
+                        responseCustomer.email, responseCustomer.name, order.getIdOrder(), order.getStatus()
+                );
+
+                messageProducerService.send(requestToQueue);
+                System.out.println("Mensaje enviado a SQS: " + requestToQueue);
+            }
+
+        }catch (Exception e){
+            System.out.println("Se presentó una excepción: "+e.getMessage());
+        }
+    }
+
+    public long getAbandonedOrderCount(){
+        return orderRepository.countByStatus(OrderStatus.ABANDONADA);
+    }
+
+    public long getOrdersCountNotAbandoned(){
+        return orderRepository.countByStatusNot(OrderStatus.ABANDONADA);
     }
 }

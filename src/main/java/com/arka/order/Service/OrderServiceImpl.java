@@ -31,6 +31,7 @@ public class OrderServiceImpl implements IOrderService{
     private final OrderRepository orderRepository;
     private final WebClient webClient;
     private final WebClient productClient;
+    private final IChangeOrderService changeOrderService;
     private final OrderItemRepository orderItemRepository;
     private final OrderStockReservationRepository orderStockReservation;
     private final MessageProducerService messageProducerService;
@@ -38,13 +39,15 @@ public class OrderServiceImpl implements IOrderService{
     public OrderServiceImpl (OrderRepository orderRepository,
                              OrderStockReservationRepository orderStockReservation,
                              OrderItemRepository orderItemRepository,
-                             MessageProducerService messageProducerService){
+                             MessageProducerService messageProducerService,
+                             IChangeOrderService changeOrderService){
         this.orderRepository = orderRepository;
         this.webClient = WebClient.create("https://64474k7pgh.execute-api.us-east-2.amazonaws.com/dev/inventory");
         this.orderStockReservation = orderStockReservation;
         this.orderItemRepository = orderItemRepository;
         this.messageProducerService = messageProducerService;
         this.productClient = WebClient.create("https://64474k7pgh.execute-api.us-east-2.amazonaws.com/dev/product/api/products/");
+        this.changeOrderService = changeOrderService;
     }
 
     @Transactional
@@ -223,6 +226,8 @@ public class OrderServiceImpl implements IOrderService{
             orderStockReservation.save(reservation);
         }
 
+        changeOrderService.sendEmailToConfirm(order);
+
         return mapToResponseDTO(order);
     }
 
@@ -299,8 +304,13 @@ public class OrderServiceImpl implements IOrderService{
                 newItem.setOrder(order);
                 newItem.setProductId(item.getProductId());
                 newItem.setQuantity(item.getQuantity());
-                newItem.setPrice(item.getPrice());
-                newItem.setSubtotal(item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+                ResponseProduct responseProduct = getProductInfo(item.getProductId());
+                if (responseProduct != null) {
+                    newItem.setPrice(responseProduct.getPrice());
+                }else{
+                    newItem.setPrice(item.getPrice());
+                }
+                newItem.setSubtotal(responseProduct.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
 
                 newItems.add(newItem);
 

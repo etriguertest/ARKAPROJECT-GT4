@@ -9,10 +9,16 @@ import com.arka.order.Dto.Response.ApiResponseListOrdersByStatus;
 import com.arka.order.Dto.Response.ChangeStatusResponse;
 import com.arka.order.Service.IChangeOrderService;
 import com.arka.order.Service.IOrderService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/order")
@@ -27,7 +33,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseCreateOrder<OrderResponse>> createOrder(@RequestBody CreateOrderRequest request){
+    public ResponseEntity<ApiResponseCreateOrder<OrderResponse>> createOrder(@Valid @RequestBody CreateOrderRequest request){
         ApiResponseCreateOrder<OrderResponse> response = orderService.createOrder(request);
 
         if(!response.getCode().equals("000")){
@@ -44,7 +50,7 @@ public class OrderController {
 
     @PostMapping("/add-product/{orderId}")
     public ResponseEntity<ApiResponseCreateOrder<OrderResponse>> addProductToOrder(
-            @PathVariable Long orderId, @RequestBody AddProductToOrderRequest request
+            @PathVariable Long orderId, @Valid @RequestBody AddProductToOrderRequest request
             ){
         request.setOrderId(orderId);
 
@@ -58,7 +64,7 @@ public class OrderController {
     @DeleteMapping("/product-order/{orderId}")
     public ResponseEntity<ApiResponseCreateOrder<OrderResponse>> removeProductoToOrder(
             @PathVariable Long orderId,
-            @RequestBody DeleteProductToOrderRequest request
+            @Valid @RequestBody DeleteProductToOrderRequest request
             ){
         ApiResponseCreateOrder<OrderResponse> response = orderService.removeProducToOrder(orderId,request);
         if(!response.getCode().equals("000")){
@@ -87,5 +93,27 @@ public class OrderController {
                 .map(ResponseEntity::ok)
                 .onErrorResume(ex -> Mono.just(ResponseEntity.badRequest()
                         .body(new ChangeStatusResponse(orderId,null, ex.getMessage()))));
+    }
+
+    @GetMapping("/abandoned/count")
+    public ResponseEntity<Map<String, Object>> getAbandonOrderCount(){
+        long count = changeOrderService.getAbandonedOrderCount();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("abandonedOrdersCount", count);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/notabandoned/count")
+    public ResponseEntity<Map<String, Object>> getOrdersCountNotAbandoned(){
+        long count = changeOrderService.getOrdersCountNotAbandoned();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("ordersCountNotAbandoned", count);
+
+        return ResponseEntity.ok(response);
     }
 }
