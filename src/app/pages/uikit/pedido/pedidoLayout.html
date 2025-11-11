@@ -108,6 +108,7 @@
                         <ng-template #header>
                             <tr>
                                 <th style="min-width:200px;" pFrozenColumn class="font-bold bg">productId</th>
+                                <th style="min-width:200px">productName</th>
                                 <th style="min-width:200px">quantity</th>
                                 <th style="min-width:200px" alignFrozen="right" pFrozenColumn [frozen]="balanceFrozen" [ngClass]="{ 'font-bold': balanceFrozen }">price</th>
                             </tr>
@@ -115,6 +116,7 @@
                         <ng-template #body let-lstPedidoDetalle>
                             <tr>
                                 <td pFrozenColumn class="font-bold">{{ lstPedidoDetalle.productId }}</td>
+                                <td style="min-width:100px">{{ lstPedidoDetalle.productName }}</td>
                                 <td style="min-width:100px">{{ lstPedidoDetalle.quantity }}</td>
                                 <td>{{ lstPedidoDetalle.price }}</td>
                             </tr>

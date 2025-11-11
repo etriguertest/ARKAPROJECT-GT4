@@ -88,7 +88,7 @@ export class PedidoLayout implements OnInit {
     monitorDropdownEstadoValues = [
         { name: 'PENDIENTE', code: 'PENDIENTE' },
         { name: 'CONFIRMADO', code: 'CONFIRMADO' },
-        { name: 'DESPACHADO', code: 'DESPACHADO' },
+        { name: 'EN_DESPACHO', code: 'EN_DESPACHO' },
         { name: 'CANCELADO', code: 'CANCELADO' },
         { name: 'ENTREGADO', code: 'ENTREGADO' }
     ];
