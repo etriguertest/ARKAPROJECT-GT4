@@ -15,9 +15,9 @@ import { Product, ProductService } from '../../service/product.service';
         <p-table [value]="topProducts" [paginator]="true" [rows]="5" responsiveLayout="scroll">
             <ng-template #header>
                 <tr>
-                    <th>Image</th>
-                    <th pSortableColumn="productName">Name <p-sortIcon field="productName"></p-sortIcon></th>
-                    <th pSortableColumn="totalQuantity">Price <p-sortIcon field="totalQuantity"></p-sortIcon></th>
+                    <th>Id Producto</th>
+                    <th pSortableColumn="productName">Nombre <p-sortIcon field="productName"></p-sortIcon></th>
+                    <th pSortableColumn="totalQuantity">Precio<p-sortIcon field="totalQuantity"></p-sortIcon></th>
                 </tr>
             </ng-template>
             <ng-template #body let-topProducts>
