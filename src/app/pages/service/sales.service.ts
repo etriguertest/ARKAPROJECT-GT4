@@ -21,15 +21,28 @@ export interface SaleItem {
     productName: string | null;
 }
 
-// export interface SalesFilterParams {
-//     id?: number; 
-//     orderId?: number;
-//     customerId?: number;
-//     customerName?: string;
-//     fromDate?: string; 
-//     toDate?: string;
-// }
+//DASBOARD
+// Define the structure for a Top Product item
+export interface TopProduct {
+    productId: number;
+    productName: string;
+    totalQuantity: number;
+}
 
+// Define the structure for a Top Customer item
+export interface TopCustomer {
+    customerId: number;
+    customerName: string;
+    totalPurchases: number;
+}
+
+// Define the main structure for the Dashboard data
+export interface DashboardData {
+    totalSales: number;
+    topProducts: TopProduct[];
+    topCustomers: TopCustomer[];
+}
+//END DASHBOARD
 
 @Injectable({
   providedIn: 'root'
@@ -75,5 +88,11 @@ export class SalesService {
         return this.http.post<string>(this.baseUrl + 'api/sales/confirm/' + orderId, null);
     }
   
-
+    /**
+     * Calls the GET endpoint to fetch sales with optional filtering.
+     * @returns An Observable of the DashboardData object.
+     */
+    public getSalesReport(): Observable<DashboardData> {
+      return this.http.get<DashboardData>(this.baseUrl+'api/sales/report');
+    }
 }
