@@ -189,7 +189,7 @@ export class PedidoLayout implements OnInit {
         this.lstPedidos = [];
         let estado = ""; 
         if (this.monitorDropdownEstadoModel != null) {
-            estado = this.monitorDropdownEstadoModel.name; 
+            estado = this.monitorDropdownEstadoModel.code; 
             console.log("if (this.monitorDropdownEstadoModel != null)")
         }
          this.pedidoService.GetOrderByStatus(estado).subscribe({
