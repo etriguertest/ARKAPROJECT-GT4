@@ -90,7 +90,8 @@ export class PedidoLayout implements OnInit {
         { name: 'CONFIRMADO', code: 'CONFIRMADO' },
         { name: 'EN_DESPACHO', code: 'EN_DESPACHO' },
         { name: 'CANCELADO', code: 'CANCELADO' },
-        { name: 'ENTREGADO', code: 'ENTREGADO' }
+        { name: 'ENTREGADA', code: 'ENTREGADA' },
+        { name: 'CARRITOS ABANDONADOS', code: 'ABANDONADA' }
     ];
     monitorDropdownEstadoModel: any = null;
     lstPedidos: Pedido [] = [];
