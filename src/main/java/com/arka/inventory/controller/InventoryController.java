@@ -4,6 +4,7 @@ import com.arka.inventory.dto.InventoryDtoResp;
 import com.arka.inventory.dto.restobjects.*;
 import com.arka.inventory.entity.Inventory;
 import com.arka.inventory.service.InventoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -88,13 +89,9 @@ public class InventoryController {
 
 
     @PostMapping("/update-quantities")
-    public Mono<InventoryUpdateItemResponse> updateInventoryQuantities(@RequestBody List<InventoryUpdateItemRequest> updateItems) {
-        try {
+    public Mono<InventoryUpdateItemResponse> updateInventoryQuantities(@Valid @RequestBody List<InventoryUpdateItemRequest> updateItems) {
+
             return inventoryServiceImpl.updateQuantities(updateItems);
-        }catch (Exception ex){
-            InventoryUpdateItemResponse inventoryUpdateItemResponse = new InventoryUpdateItemResponse();
-            return Mono.just(inventoryUpdateItemResponse);
-        }
     }
 
     @PostMapping("/check-if-Stock")
