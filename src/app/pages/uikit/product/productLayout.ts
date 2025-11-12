@@ -108,7 +108,7 @@ export class ProductLayout implements OnInit {
 
     //Form Create
     branchFormModel: string | null = null;
-    costFormModel: string | null = null;
+    costFormModel: number | null = null;
 
     monitorDropdownEstadoValues : { id: number | string; name: string }[] = [];
     monitorDropdownEstadoModel: any = null;
@@ -296,14 +296,33 @@ export class ProductLayout implements OnInit {
                     life: 3000
                 });
             } else {
-                if (!this.product){// || !this.inventoryItemReq) {
+                if (
+                    !this.product ||                        
+                    !this.product.name ||                    
+                    !this.product.price ||                   
+                    !this.product.stock ||                  
+                    !this.product.categoryId ||
+                    !this.product.description
+                ) {
                     this.messageService.add({
-                        severity: 'error',
-                        summary: 'Error',
-                        detail: 'Product or Inventory data is missing.',
+                        severity: 'warn',
+                        summary: 'Validar campos',
+                        detail: '¡Validar todos los campos!',
                         life: 3000
                     });
                     return; // Stop execution if data is missing
+                }
+                console.log("costFormModel",this.costFormModel);
+                console.log("product.price",this.product.price);
+                if(this.costFormModel! > this.product.price){
+                    this.messageService.add({
+                        severity: 'warn',
+                        summary: 'Validar campos',
+                        detail: '¡El costo debe ser menor que precio!',
+                        life: 3000
+                    });
+
+                    return;
                 }
                 // this.product!.id = 0;//this.createId();
                 // this.product.image = 'product-placeholder.svg';

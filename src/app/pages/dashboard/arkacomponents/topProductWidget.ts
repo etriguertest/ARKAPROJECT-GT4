@@ -17,7 +17,7 @@ import { Product, ProductService } from '../../service/product.service';
                 <tr>
                     <th>Id Producto</th>
                     <th pSortableColumn="productName">Nombre <p-sortIcon field="productName"></p-sortIcon></th>
-                    <th pSortableColumn="totalQuantity">Precio<p-sortIcon field="totalQuantity"></p-sortIcon></th>
+                    <th pSortableColumn="totalQuantity">Productos Adquiridos<p-sortIcon field="totalQuantity"></p-sortIcon></th>
                 </tr>
             </ng-template>
             <ng-template #body let-topProducts>
